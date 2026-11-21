@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SOS Teresina</title>
+<meta name="theme-color" content="#0b3d91">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SOS Teresina">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/564/564619.png">
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8;padding-bottom:130px}
@@ -22,6 +28,9 @@ input,select{width:100%;padding:14px;font-size:16px;border-radius:12px;border:1p
 .btnSalvar{width:100%;padding:16px;border:0;background:#25D366;color:#fff;font-size:18px;border-radius:12px;font-weight:bold;cursor:pointer}
 .btnDark{width:100%;padding:13px;border-radius:12px;border:0;background:#111;color:#fff;cursor:pointer}
 .btnEditar{background:#fff;border:2px solid #0b6ed6;color:#0b6ed6;border-radius:10px;padding:8px 16px;font-weight:bold;cursor:pointer}
+.btnPolicia{width:100%;padding:16px;border:0;background:#0b5ed7;color:#fff;font-size:17px;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:10px}
+.btnCancela{width:100%;padding:16px;border:2px solid #25D366;background:#eaf7ee;color:#0a7a2e;font-size:17px;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:10px}
+.btnInstalar{width:100%;padding:14px;border:0;background:#ff7b00;color:#fff;font-size:16px;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:10px}
 .contatoBox{background:#f8f8f8;padding:12px;border-radius:12px;margin:8px 0}
 #preview{white-space:pre-wrap;word-break:break-all;background:#fff3f3;border:1px dashed #d60000;padding:14px;border-radius:12px;text-align:left;font-size:13px;display:none;margin-top:10px;margin-bottom:20px}
 #mapa{width:100%;height:280px;border:0;border-radius:14px;display:none;margin-top:10px}
@@ -37,6 +46,14 @@ input,select{width:100%;padding:14px;font-size:16px;border-radius:12px;border:1p
 
 <div class="locCard"><div><b>Sua localização:</b><br><span id="textoLoc">Buscando... ative o GPS</span></div><button class="btnShare" onclick="compartilharLoc()">⤴ Compartilhar<br>localização</button></div>
 
+<!-- INSTALAR APP -->
+<div class="card" id="cardInstalar" style="background:#fff7ed;border:1px solid #ff7b00">
+<h3>📱 Instalar App no Celular</h3>
+<p style="font-size:14px;margin:5px 0">Deixa o SOS Teresina como app na tela inicial, com ícone vermelho, igual WhatsApp!</p>
+<button class="btnInstalar" id="btnInstalar" onclick="instalarApp()">📲 INSTALAR AGORA</button>
+<p id="comoInstalar" style="font-size:13px;color:#555;display:none;text-align:left"><b>No iPhone:</b> Aperta Compartilhar ⤴ > Adicionar à Tela de Início > Adicionar<br><br><b>No Android:</b> Aperta ⋮ (3 pontinhos) > Adicionar à tela inicial / Instalar app</p>
+</div>
+
 <h2>Serviços de Emergência</h2>
 <a class="cardServico azul" href="tel:190"><div class="ico">🛡️</div><div><b>Polícia 190</b><br><span>Acionar a Polícia Militar</span></div></a>
 <a class="cardServico vermelho" href="tel:193"><div class="ico">🚒</div><div><b>Bombeiro 193</b><br><span>Solicitar o Corpo de Bombeiros</span></div></a>
@@ -48,7 +65,6 @@ input,select{width:100%;padding:14px;font-size:16px;border-radius:12px;border:1p
 <input id="nomeUser" placeholder="Nome completo">
 <input id="cpfUser" placeholder="CPF ex: 057.015.653-00" inputmode="numeric" oninput="formatarCPF(this)">
 <button type="button" class="btnSalvar" onclick="salvarDados()">✅ SALVAR MEUS DADOS E OCULTAR</button>
-<p id="msgDados" style="color:green;font-weight:bold;text-align:center"></p>
 </div>
 <div id="dadosSalvos" class="dadosOcultos" style="display:none">
 <div><b>✅ Dados salvos e ocultos</b><br><span id="resumoDados"></span><br><small>Não ficam visíveis, mas vão completos no SOS.</small></div>
@@ -86,22 +102,40 @@ input,select{width:100%;padding:14px;font-size:16px;border-radius:12px;border:1p
 <p id="statusSOS" style="font-weight:bold;text-align:center"></p>
 <div id="preview"></div>
 <iframe id="mapa" loading="lazy"></iframe>
+
+<!-- BOTÕES NOVOS -->
+<button type="button" class="btnPolicia" onclick="enviarParaPolicia()">🛡️ ENVIAR ALERTA DIRETO PARA POLÍCIA 190</button>
+<p style="font-size:12px;color:#555;text-align:center;margin:5px 0">Liga para o 190 e já deixa o alerta pronto pra copiar / mandar</p>
+<button type="button" class="btnCancela" onclick="cancelarAlerta()">✅ ESTOU BEM - CANCELAR ALERTA</button>
+<p style="font-size:12px;color:#555;text-align:center;margin:5px 0">Avisa seus contatos que você está bem e cancela o SOS anterior</p>
+
+<p style="text-align:center"><small>Aperte o botão PÂNICO vermelho para enviar o alerta!</small></p>
 </div>
 
 <div class="panico" onclick="enviarSOSAutomatico()"><div class="bola">!</div><b>PÂNICO</b></div>
 
 <script>
 var minhaLat=null, minhaLng=null;
+var ultimoProtocolo='';
+var deferredPrompt=null;
 if(navigator.geolocation){
   navigator.geolocation.watchPosition(function(p){ minhaLat=p.coords.latitude; minhaLng=p.coords.longitude; document.getElementById('textoLoc').innerText='GPS ativo • Teresina - PI'; },function(){}, {enableHighAccuracy:true});
+}
+// PWA - instalar
+window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferredPrompt=e; document.getElementById('btnInstalar').innerText='📲 INSTALAR AGORA - CLIQUE AQUI'; });
+function instalarApp(){
+  if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(function(){ deferredPrompt=null; }); }
+  else{
+    document.getElementById('comoInstalar').style.display='block';
+    alert('Para instalar:\n\nIPHONE: Aperta Compartilhar ⤴ > Adicionar à Tela de Início\n\nANDROID: Aperta os 3 pontinhos ⋮ > Adicionar à tela inicial');
+  }
 }
 function formatarCPF(input){
   var v=input.value.replace(/\D/g,'').slice(0,11);
   if(v.length>9) v=v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/,'$1.$2.$3-$4');
   else if(v.length>6) v=v.replace(/(\d{3})(\d{3})(\d{1,3})/,'$1.$2.$3');
   else if(v.length>3) v=v.replace(/(\d{3})(\d{1,3})/,'$1.$2');
-  input.value=v;
-  return v;
+  input.value=v; return v;
 }
 function formatarCPFTexto(cpf){
   var v=(cpf||'').replace(/\D/g,'').slice(0,11);
@@ -110,30 +144,21 @@ function formatarCPFTexto(cpf){
 }
 function salvarDados(){
   var nome=document.getElementById('nomeUser').value.trim();
-  var cpfRaw=document.getElementById('cpfUser').value.trim();
-  var cpf=formatarCPFTexto(cpfRaw);
-  if(!nome){ alert('❌ Coloque seu nome primeiro!'); return; }
-  if(!cpf){ alert('❌ Coloque seu CPF primeiro!'); return; }
+  var cpf=formatarCPFTexto(document.getElementById('cpfUser').value.trim());
+  if(!nome){ alert('❌ Coloque seu nome!'); return; }
+  if(!cpf){ alert('❌ Coloque seu CPF!'); return; }
   localStorage.setItem('nomeUser', nome);
   localStorage.setItem('cpfUser', cpf);
   document.getElementById('formDados').style.display='none';
   document.getElementById('dadosSalvos').style.display='flex';
   var partes=nome.split(' ');
-  var nomeCurto=partes[0]+' '+(partes.length>1?partes[partes.length-1].charAt(0)+'***':'');
-  document.getElementById('resumoDados').innerText=nomeCurto+' | CPF: ***.***.'+cpf.slice(8,11)+'-'+cpf.slice(12);
-  alert('✅ SALVO E OCULTO! CPF formatado: '+cpf);
+  document.getElementById('resumoDados').innerText=partes[0]+' '+(partes.length>1?partes[partes.length-1].charAt(0)+'***':'')+' | CPF: ***.***.'+cpf.slice(8,11)+'-'+cpf.slice(12);
+  alert('✅ SALVO E OCULTO!');
 }
-function editarDados(){
-  document.getElementById('formDados').style.display='block';
-  document.getElementById('dadosSalvos').style.display='none';
-}
+function editarDados(){ document.getElementById('formDados').style.display='block'; document.getElementById('dadosSalvos').style.display='none'; }
 function salvarContatos(){
   var dados=[];
-  for(var i=1;i<=3;i++){
-    var nome=document.getElementById('nome'+i).value;
-    var zap=document.getElementById('zap'+i).value.replace(/\D/g,'');
-    if(zap) dados.push({nome:nome||'Contato '+i, zap:zap});
-  }
+  for(var i=1;i<=3;i++){ var nome=document.getElementById('nome'+i).value; var zap=document.getElementById('zap'+i).value.replace(/\D/g,''); if(zap) dados.push({nome:nome||'Contato '+i, zap:zap}); }
   if(dados.length==0){ alert('❌ Coloque pelo menos 1 número!'); return; }
   localStorage.setItem('meusContatos', JSON.stringify(dados));
   localStorage.setItem('meuZap', dados[0].zap);
@@ -142,22 +167,13 @@ function salvarContatos(){
   document.getElementById('resumoContatos').innerText=dados.length+' contato(s): '+dados.map(function(d){ return d.nome.split(' ')[0]+' (****'+d.zap.slice(-4)+')'; }).join(', ');
   alert('✅ CONTATOS SALVOS E OCULTOS!');
 }
-function editarContatos(){
-  document.getElementById('formContatos').style.display='block';
-  document.getElementById('contatosSalvos').style.display='none';
-}
+function editarContatos(){ document.getElementById('formContatos').style.display='block'; document.getElementById('contatosSalvos').style.display='none'; }
 function escolherContato(){
   if(navigator.contacts && navigator.contacts.select){
     navigator.contacts.select(['name','tel'],{multiple:false}).then(function(cts){
-      if(cts.length>0){
-        var c=cts[0];
-        var nome=c.name?c.name[0]:'';
-        var tel=c.tel?c.tel[0].replace(/\D/g,''):'';
+      if(cts.length>0){ var c=cts[0]; var nome=c.name?c.name[0]:''; var tel=c.tel?c.tel[0].replace(/\D/g,''):'';
         if(tel.startsWith('55') && tel.length>11) tel=tel.substring(2);
-        document.getElementById('nome1').value=nome;
-        document.getElementById('zap1').value=tel;
-        alert('Contato 1 preenchido: '+nome);
-      }
+        document.getElementById('nome1').value=nome; document.getElementById('zap1').value=tel; alert('Contato 1: '+nome); }
     });
   } else { alert('Digite na mão!'); }
 }
@@ -165,37 +181,73 @@ function compartilharLoc(){
   if(!minhaLat){ alert('Ative o GPS!'); return; }
   window.open('https://maps.google.com/?q='+minhaLat+','+minhaLng,'_blank');
 }
+function montarAlerta(tipo){
+  var nome=localStorage.getItem('nomeUser')||'Não informado';
+  var cpf=formatarCPFTexto(localStorage.getItem('cpfUser')||'Não informado');
+  var dataHora=new Date().toLocaleString('pt-BR');
+  var ocorrencia=document.getElementById('ocorrencia').value;
+  var locLink=(minhaLat&&minhaLng)?'https://maps.google.com/?q='+minhaLat+','+minhaLng:'GPS desligado';
+  if(tipo=='cancelar'){
+    return '✅ CANCELAMENTO - SOS TERESINA - CICC\n\nPROTOCOLO: '+(ultimoProtocolo||'SOS anterior')+'\nDATA/HORA: '+dataHora+'\nNOME: '+nome+'\nCPF: '+cpf+'\n\n✅ ESTOU BEM! PODEM CANCELAR O ALERTA!\nFoi engano / já estou em segurança.\nObrigado a todos!\n\nLOCALIZAÇÃO ATUAL: '+locLink;
+  }
+  if(tipo=='policia'){
+    return '🚨 ALERTA SOS TERESINA - CICC - PARA POLÍCIA 190\n\nPROTOCOLO: '+(ultimoProtocolo||'NOVO')+'\nDATA/HORA: '+dataHora+'\nNOME: '+nome+'\nCPF: '+cpf+'\nOCORRÊNCIA: '+ocorrencia+'\nLOCALIZAÇÃO: '+locLink+'\n\nPRECISO DE AJUDA URGENTE! VIATURA POR FAVOR!';
+  }
+  return '🚨 ALERTA SOS TERESINA - CICC\n\nPROTOCOLO: '+ultimoProtocolo+'\nDATA/HORA: '+dataHora+'\nNOME: '+nome+'\nCPF: '+cpf+'\nOCORRÊNCIA: '+ocorrencia+'\nLOCALIZAÇÃO: '+locLink+'\n\nPRECISO DE AJUDA URGENTE!';
+}
 function enviarSOSAutomatico(){
   var dados=JSON.parse(localStorage.getItem('meusContatos')||'[]');
   if(dados.length==0){ alert('Cadastre 1 contato primeiro!'); return; }
-  var nome=localStorage.getItem('nomeUser')||'Não informado';
-  var cpf=formatarCPFTexto(localStorage.getItem('cpfUser')||'Não informado');
   var status=document.getElementById('statusSOS');
   status.innerText='⏳ Gerando alerta...';
+  ultimoProtocolo='SOS-'+new Date().getFullYear()+'-'+Math.floor(10000+Math.random()*89999);
+  localStorage.setItem('ultimoProtocolo', ultimoProtocolo);
   var fazer=function(){
-    var protocolo='SOS-'+new Date().getFullYear()+'-'+Math.floor(10000+Math.random()*89999);
-    var dataHora=new Date().toLocaleString('pt-BR');
-    var ocorrencia=document.getElementById('ocorrencia').value;
-    var locLink=(minhaLat&&minhaLng)?'https://maps.google.com/?q='+minhaLat+','+minhaLng:'GPS desligado';
-    var msg='🚨 ALERTA SOS TERESINA - CICC\n\nPROTOCOLO: '+protocolo+'\nDATA/HORA: '+dataHora+'\nNOME: '+nome+'\nCPF: '+cpf+'\nOCORRÊNCIA: '+ocorrencia+'\nLOCALIZAÇÃO: '+locLink+'\n\nPRECISO DE AJUDA URGENTE!';
+    var msg=montarAlerta('sos');
     var prev=document.getElementById('preview');
     prev.style.display='block'; prev.innerText=msg;
-    status.innerText='✅ Alerta gerado!';
+    status.innerText='✅ Alerta gerado! Protocolo: '+ultimoProtocolo;
     if(minhaLat){ var m=document.getElementById('mapa'); m.src='https://maps.google.com/maps?q='+minhaLat+','+minhaLng+'&z=16&output=embed'; m.style.display='block'; }
     dados.forEach(function(c,idx){ setTimeout(function(){ window.open('https://wa.me/55'+c.zap+'?text='+encodeURIComponent(msg),'_blank'); }, idx*900); });
   };
   if(minhaLat&&minhaLng){ fazer(); } else { navigator.geolocation.getCurrentPosition(function(p){ minhaLat=p.coords.latitude; minhaLng=p.coords.longitude; fazer(); }, function(){ fazer(); }, {enableHighAccuracy:true, timeout:8000}); }
 }
+function enviarParaPolicia(){
+  var nome=localStorage.getItem('nomeUser')||'';
+  if(!nome){ alert('Cadastre seus dados primeiro!'); return; }
+  if(!ultimoProtocolo) ultimoProtocolo=localStorage.getItem('ultimoProtocolo')||'SOS-'+new Date().getFullYear()+'-'+Math.floor(10000+Math.random()*89999);
+  var msg=montarAlerta('policia');
+  // Copia o texto
+  if(navigator.clipboard){ navigator.clipboard.writeText(msg); }
+  var prev=document.getElementById('preview');
+  prev.style.display='block'; prev.innerText=msg;
+  var ligar=confirm('🛡️ ALERTA PARA POLÍCIA PRONTO!\n\nTexto copiado!\n\nOK = Ligar agora para 190 e colar o alerta\nCancelar = Só copiar o texto');
+  if(ligar){ window.location.href='tel:190'; }
+  else{ alert('Texto copiado! Cola no WhatsApp da polícia ou no 190.'); }
+}
+function cancelarAlerta(){
+  var dados=JSON.parse(localStorage.getItem('meusContatos')||'[]');
+  if(dados.length==0){ alert('Cadastre 1 contato primeiro!'); return; }
+  if(!ultimoProtocolo) ultimoProtocolo=localStorage.getItem('ultimoProtocolo')||'';
+  var confirma=confirm('✅ Você está bem mesmo?\n\nVamos avisar seus contatos que pode cancelar o SOS!');
+  if(!confirma) return;
+  var msg=montarAlerta('cancelar');
+  var prev=document.getElementById('preview');
+  prev.style.display='block'; prev.innerText=msg;
+  document.getElementById('statusSOS').innerText='✅ Alerta cancelado! Avisando seus contatos...';
+  dados.forEach(function(c,idx){ setTimeout(function(){ window.open('https://wa.me/55'+c.zap+'?text='+encodeURIComponent(msg),'_blank'); }, idx*900); });
+  alert('✅ Pronto! Seus contatos vão receber que você está bem!');
+}
 try{
   var n=localStorage.getItem('nomeUser');
   var c=localStorage.getItem('cpfUser');
+  ultimoProtocolo=localStorage.getItem('ultimoProtocolo')||'';
   if(n) document.getElementById('nomeUser').value=n;
   if(c) document.getElementById('cpfUser').value=formatarCPFTexto(c);
   if(n && c){
     document.getElementById('formDados').style.display='none';
     document.getElementById('dadosSalvos').style.display='flex';
-    var partes=n.split(' ');
-    var cpfF=formatarCPFTexto(c);
+    var partes=n.split(' '); var cpfF=formatarCPFTexto(c);
     document.getElementById('resumoDados').innerText=partes[0]+' '+(partes.length>1?partes[partes.length-1].charAt(0)+'***':'')+' | CPF: ***.***.'+cpfF.slice(8,11)+'-'+cpfF.slice(12);
   }
   var salvos=JSON.parse(localStorage.getItem('meusContatos')||'[]');
@@ -205,6 +257,8 @@ try{
     document.getElementById('contatosSalvos').style.display='flex';
     document.getElementById('resumoContatos').innerText=salvos.length+' contato(s) salvos';
   }
+  // Se já está instalado, esconde o card de instalar
+  if(window.matchMedia('(display-mode: standalone)').matches){ document.getElementById('cardInstalar').style.display='none'; }
 }catch(e){}
 </script>
 </body>
