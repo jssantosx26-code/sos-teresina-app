@@ -48,11 +48,13 @@ small{color:#666}
 <button onclick="pegarLoc()" style="padding:13px 20px;border-radius:10px;border:0;background:#111;color:#fff;font-size:16px">📍 Ver no Mapa</button>
 <iframe id="mapa" loading="lazy"></iframe>
 <a id="linkMapa" class="btn blue" style="display:none" href="#" target="_blank">Abrir no Google Maps</a>
+<button id="btnEnviarLoc" onclick="enviarLocZap()" style="display:none;padding:16px;border:0;background:#25D366;color:#fff;font-size:18px;border-radius:12px;font-weight:bold;width:100%;margin-top:10px">📤 ENVIAR MINHA LOCALIZAÇÃO NO WHATSAPP</button>
 </div>
 
 <div class="card"><small>SOS Teresina 4.0 - Feito para ajudar</small></div>
 
 <script>
+let minhaLat = null, minhaLng = null;
 function salvarZap(){
   let n = document.getElementById('zap').value.replace(/\D/g,'');
   if(n.length < 10){ alert('Coloque o DDD + número, ex: 86999999999'); return; }
@@ -62,22 +64,28 @@ function salvarZap(){
 function abrirZap(){
   let n = localStorage.getItem('meuZap');
   if(!n){ alert('Cadastre o número primeiro!'); return; }
-  let msg = '🚨 SOS! Preciso de ajuda! Me ajuda por favor!';
-  window.open('https://wa.me/55'+n+'?text='+encodeURIComponent(msg), '_blank');
+  window.open('https://wa.me/55'+n+'?text='+encodeURIComponent('🚨 SOS! Preciso de ajuda! Me ajuda por favor!'), '_blank');
 }
 function pegarLoc(){
   document.getElementById('loc').innerText='Buscando sua localização...';
   navigator.geolocation.getCurrentPosition(p=>{
-    let lat = p.coords.latitude;
-    let lng = p.coords.longitude;
+    minhaLat = p.coords.latitude; minhaLng = p.coords.longitude;
     let mapa = document.getElementById('mapa');
-    mapa.src = 'https://maps.google.com/maps?q='+lat+','+lng+'&z=16&output=embed';
+    mapa.src = 'https://maps.google.com/maps?q='+minhaLat+','+minhaLng+'&z=16&output=embed';
     mapa.style.display = 'block';
     let link = document.getElementById('linkMapa');
-    link.href = 'https://maps.google.com/?q='+lat+','+lng;
+    link.href = 'https://maps.google.com/?q='+minhaLat+','+minhaLng;
     link.style.display = 'block';
+    document.getElementById('btnEnviarLoc').style.display = 'block';
     document.getElementById('loc').innerHTML = '✅ Você está aqui! 👇';
   },()=>{document.getElementById('loc').innerText='Ative o GPS e tente de novo';},{enableHighAccuracy:true});
+}
+function enviarLocZap(){
+  let n = localStorage.getItem('meuZap');
+  if(!n){ alert('Cadastre o número primeiro lá em cima!'); return; }
+  if(!minhaLat){ alert('Aperte Ver no Mapa primeiro!'); return; }
+  let msg = '🚨 SOS TERESINA - PRECISO DE AJUDA!\n\nEstou aqui, me ajuda por favor:\nhttps://maps.google.com/?q='+minhaLat+','+minhaLng;
+  window.open('https://wa.me/55'+n+'?text='+encodeURIComponent(msg), '_blank');
 }
 let salvo = localStorage.getItem('meuZap');
 if(salvo){ document.getElementById('zap').value = salvo; document.getElementById('salvo').innerText = '✅ Número salvo: ' + salvo; }
