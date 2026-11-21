@@ -14,6 +14,8 @@ header p{margin:5px 0 0}
 .btn.blue{background:#007bff}
 .btn.green{background:#25D366}
 .btn.orange{background:#ff7b00}
+input{padding:13px;width:85%;font-size:18px;border-radius:10px;border:1px solid #ccc;text-align:center}
+.btnSalvar{padding:13px 25px;border:0;background:#25D366;color:#fff;font-size:17px;border-radius:10px;font-weight:bold}
 small{color:#666}
 </style>
 </head>
@@ -27,7 +29,16 @@ small{color:#666}
 <a class="btn" href="tel:190">📞 POLÍCIA - 190</a>
 <a class="btn orange" href="tel:193">🚒 BOMBEIROS - 193</a>
 <a class="btn blue" href="tel:192">🚑 SAMU - 192</a>
-<a class="btn green" href="https://wa.me/5586999999999">💬 WHATSAPP SOS</a>
+</div>
+
+<div class="card">
+<h3>💬 Seu Contato de Emergência</h3>
+<p>Cadastre o número de quem vai te ajudar:<br><small>Ex: mãe, marido, vizinho</small></p>
+<input id="zap" placeholder="Ex: 86999999999" inputmode="numeric">
+<br><br>
+<button class="btnSalvar" onclick="salvarZap()">Salvar Número</button>
+<p id="salvo" style="color:green;font-weight:bold"></p>
+<a class="btn green" href="#" onclick="abrirZap();return false;">💬 WHATSAPP SOS</a>
 </div>
 
 <div class="card">
@@ -39,12 +50,25 @@ small{color:#666}
 <div class="card"><small>SOS Teresina 4.0 - Feito para ajudar</small></div>
 
 <script>
+function salvarZap(){
+  let n = document.getElementById('zap').value.replace(/\D/g,'');
+  if(n.length < 10){ alert('Coloque o DDD + número, ex: 86999999999'); return; }
+  localStorage.setItem('meuZap', n);
+  document.getElementById('salvo').innerText = '✅ Salvo! Número: ' + n;
+}
+function abrirZap(){
+  let n = localStorage.getItem('meuZap');
+  if(!n){ alert('Cadastre o número primeiro!'); return; }
+  window.open('https://wa.me/55'+n+'?text='+encodeURIComponent('🚨 SOS! Preciso de ajuda! Me ajuda por favor!'), '_blank');
+}
 function pegarLoc(){
   document.getElementById('loc').innerText='Buscando...';
   navigator.geolocation.getCurrentPosition(p=>{
     document.getElementById('loc').innerHTML='Você está aqui:<br>https://maps.google.com/?q='+p.coords.latitude+','+p.coords.longitude;
   },()=>{document.getElementById('loc').innerText='Ative o GPS e tente de novo';});
 }
+let salvo = localStorage.getItem('meuZap');
+if(salvo){ document.getElementById('zap').value = salvo; document.getElementById('salvo').innerText = '✅ Número salvo: ' + salvo; }
 </script>
 </body>
 </html>
