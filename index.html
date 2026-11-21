@@ -5,34 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SOS Teresina</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f2f2f2;text-align:center;padding:20px}
-h1{color:#d32f2f;font-size:32px;margin-top:20px}
-p{color:#555;margin:10px 0 20px}
-.panico{background:#d32f2f;color:#fff;border:none;width:220px;height:220px;border-radius:50%;font-size:28px;font-weight:bold;cursor:pointer;box-shadow:0 10px 20px rgba(0,0,0,.3)}
-.panico:active{transform:scale(.95)}
-.botoes{margin-top:25px;display:flex;flex-direction:column;gap:12px;max-width:320px;margin-left:auto;margin-right:auto}
-.botoes a{text-decoration:none;padding:15px;border-radius:12px;font-weight:bold;color:#fff}
-.pm{background:#1565c0}
-.samu{background:#2e7d32}
-.bombeiros{background:#ef6c00}
+body{font-family:Arial,sans-serif;text-align:center;background:#fff5f5;margin:0;padding:20px}
+h1{color:#d32f2f;font-size:32px;margin-bottom:5px}
+p{color:#555}
+.panico{background:#d32f2f;color:white;border:none;padding:25px 30px;font-size:22px;font-weight:bold;border-radius:50%;width:200px;height:200px;cursor:pointer;box-shadow:0 5px 15px rgba(0,0,0,0.3);margin:20px 0}
+.whats{background:#25D366;color:white;border:none;padding:15px 20px;font-size:18px;font-weight:bold;border-radius:15px;width:100%;max-width:320px;cursor:pointer;margin:10px 0}
+.card{background:white;padding:15px;border-radius:15px;margin:12px auto;max-width:320px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.card a{display:block;background:#d32f2f;color:white;text-decoration:none;padding:12px;border-radius:10px;font-weight:bold;margin-top:8px}
+#msg{color:#d32f2f;font-weight:bold;margin-top:10px;font-size:18px}
 </style>
 </head>
 <body>
 <h1>🚨 SOS TERESINA</h1>
-<p>Em caso de emergência, aperte o botão abaixo</p>
+<p>Ajuda rápida quando você mais precisa</p>
+
 <button class="panico" onclick="panico()">BOTÃO<br>DE PÂNICO</button>
-<p id="msg" style="font-weight:bold;color:#d32f2f"></p>
-<div class="botoes">
-<a class="pm" href="tel:190">👮 LIGAR PARA PM - 190</a>
-<a class="samu" href="tel:192">🚑 LIGAR PARA SAMU - 192</a>
-<a class="bombeiros" href="tel:193">🔥 LIGAR PARA BOMBEIROS - 193</a>
-</div>
+<div id="msg"></div>
+
+<button class="whats" onclick="enviarLocalizacao()">📍 ENVIAR MINHA LOCALIZAÇÃO NO WHATSAPP</button>
+
+<div class="card"><h3>🚓 Polícia Militar</h3><p>Emergência 24h</p><a href="tel:190">LIGAR 190</a></div>
+<div class="card"><h3>🚑 SAMU</h3><p>Ambulância 24h</p><a href="tel:192">LIGAR 192</a></div>
+<div class="card"><h3>🔥 Bombeiros</h3><p>Incêndio e resgate</p><a href="tel:193">LIGAR 193</a></div>
+
 <script>
 function panico(){
-document.getElementById('msg').innerText="⚠️ ALERTA ENVIADO! Fique calma, ajuda está a caminho.";
-if(navigator.vibrate) navigator.vibrate([500,200,500]);
-alert("SOS ENVIADO! Ligue para 190 se estiver em perigo imediato.");
+document.getElementById('msg').innerText='🚨 ALERTA ENVIADO! Fique calma, ajuda está a caminho.';
+alert('ALERTA ENVIADO! Fique calma.');
+}
+function enviarLocalizacao(){
+if(!navigator.geolocation){alert('Seu celular não permite pegar localização');return;}
+document.getElementById('msg').innerText='Pegando sua localização...';
+navigator.geolocation.getCurrentPosition(function(pos){
+var lat=pos.coords.latitude;
+var lon=pos.coords.longitude;
+var link='https://maps.google.com/?q='+lat+','+lon;
+var texto='SOCORRO! Preciso de ajuda! Minha localização: '+link;
+window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank');
+document.getElementById('msg').innerText='Localização pronta! Escolha pra quem enviar no WhatsApp.';
+},function(){alert('Ative a localização do celular e tente de novo.');});
 }
 </script>
 </body>
