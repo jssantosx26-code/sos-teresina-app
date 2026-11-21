@@ -5,90 +5,211 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SOS Teresina</title>
 <style>
-body{margin:0;font-family:Arial;background:#f2f2f2;text-align:center}
-header{background:#d60000;color:#fff;padding:25px 10px}
-header h1{margin:0;font-size:32px}
-header p{margin:5px 0 0}
-.card{background:#fff;margin:15px;padding:20px;border-radius:15px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.btn{display:block;background:#d60000;color:#fff;text-decoration:none;padding:16px;border-radius:12px;font-size:20px;font-weight:bold;margin:10px 0}
-.btn.blue{background:#007bff}
-.btn.green{background:#25D366}
-.btn.orange{background:#ff7b00}
-input{padding:13px;width:85%;font-size:18px;border-radius:10px;border:1px solid #ccc;text-align:center}
-.btnSalvar{padding:13px 25px;border:0;background:#25D366;color:#fff;font-size:17px;border-radius:10px;font-weight:bold}
-#mapa{width:100%;height:300px;border:0;border-radius:12px;display:none;margin-top:10px}
-small{color:#666}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8;padding-bottom:110px}
+.topo{background:#fff;padding:28px 20px 10px;text-align:center}
+.topo h1{margin:0;color:#0b3d91;font-size:42px;font-weight:900;letter-spacing:-1px}
+.topo p{margin:6px 0 0;color:#555;font-size:16px}
+.locCard{background:#eef4ff;margin:18px 16px 5px;padding:14px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.locCard .esq{display:flex;align-items:center;gap:10px;text-align:left}
+.locCard .pin{font-size:32px}
+.locCard b{font-size:15px}
+.locCard span{font-size:14px;color:#333}
+.btnShare{background:#fff;border:2px solid #0b6ed6;color:#0b6ed6;border-radius:12px;padding:10px 12px;font-weight:bold;font-size:13px;cursor:pointer}
+h2{padding:0 20px;font-size:24px;margin:22px 0 12px}
+.cardServico{margin:12px 16px;border-radius:20px;padding:20px;display:flex;align-items:center;gap:16px;text-decoration:none;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.cardServico .ico{font-size:46px}
+.cardServico b{font-size:28px;display:block;line-height:1}
+.cardServico span{font-size:15px;opacity:.9}
+.azul{background:#0b5ed7}
+.vermelho{background:#e11b22}
+.branco{background:#fff;color:#111;border:1px solid #e5e5e5}
+.branco span{color:#444}
+.card{background:#fff;margin:14px 16px;padding:18px;border-radius:18px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.card h3{margin:0 0 8px}
+input,select{width:100%;padding:14px;font-size:16px;border-radius:12px;border:1px solid #ddd;margin:6px 0;text-align:center}
+.btnSalvar{width:100%;padding:14px;border:0;background:#25D366;color:#fff;font-size:17px;border-radius:12px;font-weight:bold;cursor:pointer}
+.btnDark{width:100%;padding:13px;border-radius:12px;border:0;background:#111;color:#fff;font-size:15px;cursor:pointer}
+.contatoBox{background:#f8f8f8;padding:12px;border-radius:12px;margin:8px 0;text-align:left}
+#preview{white-space:pre-wrap;background:#fff3f3;border:1px dashed #d60000;padding:14px;border-radius:12px;text-align:left;font-size:13px;display:none;margin-top:10px}
+#mapa{width:100%;height:280px;border:0;border-radius:14px;display:none;margin-top:10px}
+.panico{position:fixed;right:18px;bottom:20px;z-index:99;text-align:center;cursor:pointer}
+.panico .bola{width:92px;height:92px;background:#e11b22;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:56px;font-weight:900;box-shadow:0 8px 20px rgba(225,27,34,.5);border:4px solid #fff}
+.panico b{color:#c00;font-size:18px;display:block;margin-top:4px}
+.rodape{padding:0 20px;display:flex;gap:8px;align-items:flex-start;color:#666;font-size:13px;text-align:left;margin-top:18px}
+small{color:#888}
 </style>
 </head>
 <body>
-<header>
-<h1>🚨 SOS TERESINA</h1>
-<p>Ajuda rápida em emergência</p>
-</header>
+
+<div class="topo">
+<h1>SOS Teresina</h1>
+<p>Segurança Pública • Teresina — PI</p>
+</div>
+
+<div class="locCard">
+<div class="esq"><div class="pin">📍</div><div><b>Sua localização:</b><br><span id="textoLoc">Buscando... ative o GPS</span></div></div>
+<button class="btnShare" onclick="compartilharLoc()">⤴ Compartilhar<br>localização</button>
+</div>
+
+<h2>Serviços de Emergência</h2>
+
+<a class="cardServico azul" href="tel:190"><div class="ico">🛡️</div><div><b>Polícia 190</b><span>Acionar a Polícia Militar</span></div></a>
+<a class="cardServico vermelho" href="tel:193"><div class="ico">🚒</div><div><b>Bombeiro 193</b><span>Solicitar o Corpo de Bombeiros</span></div></a>
+<a class="cardServico branco" href="tel:192"><div class="ico">➕</div><div><b>SAMU 192</b><span>Chamar Atendimento SAMU</span></div></a>
 
 <div class="card">
-<a class="btn" href="tel:190">📞 POLÍCIA - 190</a>
-<a class="btn orange" href="tel:193">🚒 BOMBEIROS - 193</a>
-<a class="btn blue" href="tel:192">🚑 SAMU - 192</a>
+<h3>👤 Meus Dados - CICC</h3>
+<input id="nomeUser" placeholder="Nome completo">
+<input id="cpfUser" placeholder="CPF ex: 057.015.653-00" inputmode="numeric">
+<button class="btnSalvar" onclick="salvarDados()">✅ Salvar Meus Dados</button>
+<p id="salvoDados" style="color:green;font-weight:bold"></p>
 </div>
 
 <div class="card">
-<h3>💬 Seu Contato de Emergência</h3>
-<p>Cadastre o número de quem vai te ajudar:</p>
-<input id="zap" placeholder="Ex: 86999999999" inputmode="numeric">
-<br><br>
-<button class="btnSalvar" onclick="salvarZap()">Salvar Número</button>
+<h3>💬 Meus 3 Contatos de Emergência</h3>
+<button class="btnDark" onclick="escolherContato()">📱 Escolher dos Contatos do Celular</button>
+<div class="contatoBox"><b>Contato 1:</b><input id="nome1" placeholder="Nome ex: Mãe"><input id="zap1" placeholder="Ex: 86999999999" inputmode="numeric"></div>
+<div class="contatoBox"><b>Contato 2:</b><input id="nome2" placeholder="Nome ex: Marido"><input id="zap2" placeholder="Ex: 86888888888" inputmode="numeric"></div>
+<div class="contatoBox"><b>Contato 3:</b><input id="nome3" placeholder="Nome ex: Vizinho"><input id="zap3" placeholder="Ex: 86777777777" inputmode="numeric"></div>
+<button class="btnSalvar" onclick="salvarContatos()">✅ Salvar Meus 3 Contatos</button>
 <p id="salvo" style="color:green;font-weight:bold"></p>
-<a class="btn green" href="#" onclick="abrirZap();return false;">💬 WHATSAPP SOS</a>
 </div>
 
-<div class="card">
-<h3>📍 Minha Localização</h3>
-<p id="loc">Aperte para ver você no mapa</p>
-<button onclick="pegarLoc()" style="padding:13px 20px;border-radius:10px;border:0;background:#111;color:#fff;font-size:16px">📍 Ver no Mapa</button>
+<div class="card" style="border:2px solid #e11b22">
+<h3>🚨 O que está acontecendo?</h3>
+<select id="ocorrencia">
+<option>🚨 Estou em perigo agora</option>
+<option>🏠 Violência doméstica</option>
+<option>🔫 Assalto / Roubo</option>
+<option>🚗 Acidente</option>
+<option>🏥 Preciso de ambulância</option>
+<option>🔥 Incêndio</option>
+<option>👤 Pessoa suspeita me seguindo</option>
+<option>🆘 Outro - Preciso de ajuda</option>
+</select>
+<p id="statusSOS" style="font-weight:bold;text-align:center"></p>
+<div id="preview"></div>
 <iframe id="mapa" loading="lazy"></iframe>
-<a id="linkMapa" class="btn blue" style="display:none" href="#" target="_blank">Abrir no Google Maps</a>
-<button id="btnEnviarLoc" onclick="enviarLocZap()" style="display:none;padding:16px;border:0;background:#25D366;color:#fff;font-size:18px;border-radius:12px;font-weight:bold;width:100%;margin-top:10px">📤 ENVIAR MINHA LOCALIZAÇÃO NO WHATSAPP</button>
+<p style="text-align:center"><small>Aperte o botão PÂNICO vermelho para enviar o alerta!</small></p>
 </div>
 
-<div class="card"><small>SOS Teresina 4.0 - Feito para ajudar</small></div>
+<div class="rodape">
+<div style="font-size:22px">🛡️</div>
+<div>Uso exclusivo para emergências reais •<br>Liga diretamente para o serviço</div>
+</div>
+
+<!-- BOTÃO PÂNICO -->
+<div class="panico" onclick="enviarSOSAutomatico()">
+<div class="bola">!</div>
+<b>PÂNICO</b>
+</div>
 
 <script>
-let minhaLat = null, minhaLng = null;
-function salvarZap(){
-  let n = document.getElementById('zap').value.replace(/\D/g,'');
-  if(n.length < 10){ alert('Coloque o DDD + número, ex: 86999999999'); return; }
-  localStorage.setItem('meuZap', n);
-  document.getElementById('salvo').innerText = '✅ Salvo! Número: ' + n;
+let contatoAtual=1;
+let minhaLat=null, minhaLng=null;
+let bairroAtual='Centro, Teresina - PI';
+
+if(navigator.geolocation){
+  navigator.geolocation.watchPosition(p=>{
+    minhaLat=p.coords.latitude; minhaLng=p.coords.longitude;
+    document.getElementById('textoLoc').innerText = bairroAtual + ' • GPS ativo';
+  },()=>{ document.getElementById('textoLoc').innerText = bairroAtual; },{enableHighAccuracy:true});
 }
-function abrirZap(){
-  let n = localStorage.getItem('meuZap');
-  if(!n){ alert('Cadastre o número primeiro!'); return; }
-  window.open('https://wa.me/55'+n+'?text='+encodeURIComponent('🚨 SOS! Preciso de ajuda! Me ajuda por favor!'), '_blank');
+
+function salvarDados(){
+  let nome=document.getElementById('nomeUser').value.trim();
+  let cpf=document.getElementById('cpfUser').value.trim();
+  if(!nome){ alert('Coloque seu nome!'); return; }
+  localStorage.setItem('nomeUser', nome);
+  localStorage.setItem('cpfUser', cpf);
+  document.getElementById('salvoDados').innerText='✅ Salvo: '+nome;
 }
-function pegarLoc(){
-  document.getElementById('loc').innerText='Buscando sua localização...';
-  navigator.geolocation.getCurrentPosition(p=>{
-    minhaLat = p.coords.latitude; minhaLng = p.coords.longitude;
-    let mapa = document.getElementById('mapa');
-    mapa.src = 'https://maps.google.com/maps?q='+minhaLat+','+minhaLng+'&z=16&output=embed';
-    mapa.style.display = 'block';
-    let link = document.getElementById('linkMapa');
-    link.href = 'https://maps.google.com/?q='+minhaLat+','+minhaLng;
-    link.style.display = 'block';
-    document.getElementById('btnEnviarLoc').style.display = 'block';
-    document.getElementById('loc').innerHTML = '✅ Você está aqui! 👇';
-  },()=>{document.getElementById('loc').innerText='Ative o GPS e tente de novo';},{enableHighAccuracy:true});
+async function escolherContato(){
+  if(navigator.contacts && navigator.contacts.select){
+    try{
+      let cts=await navigator.contacts.select(['name','tel'],{multiple:false});
+      if(cts.length>0){
+        let c=cts[0];
+        let nome=c.name?c.name[0]:'';
+        let tel=c.tel?c.tel[0].replace(/\D/g,''):'';
+        if(tel.startsWith('55') && tel.length>11) tel=tel.substring(2);
+        document.getElementById('nome'+contatoAtual).value=nome;
+        document.getElementById('zap'+contatoAtual).value=tel;
+        alert('Contato '+contatoAtual+' preenchido: '+nome);
+        contatoAtual++; if(contatoAtual>3) contatoAtual=1;
+        return;
+      }
+    }catch(e){}
+  }
+  alert('Digite o nome e número na mão!');
 }
-function enviarLocZap(){
-  let n = localStorage.getItem('meuZap');
-  if(!n){ alert('Cadastre o número primeiro lá em cima!'); return; }
-  if(!minhaLat){ alert('Aperte Ver no Mapa primeiro!'); return; }
-  let msg = '🚨 SOS TERESINA - PRECISO DE AJUDA!\n\nEstou aqui, me ajuda por favor:\nhttps://maps.google.com/?q='+minhaLat+','+minhaLng;
-  window.open('https://wa.me/55'+n+'?text='+encodeURIComponent(msg), '_blank');
+function salvarContatos(){
+  let dados=[];
+  for(let i=1;i<=3;i++){
+    let nome=document.getElementById('nome'+i).value;
+    let zap=document.getElementById('zap'+i).value.replace(/\D/g,'');
+    if(zap) dados.push({nome:nome||'Contato '+i, zap:zap});
+  }
+  if(dados.length==0){ alert('Coloque pelo menos 1 número!'); return; }
+  localStorage.setItem('meusContatos', JSON.stringify(dados));
+  localStorage.setItem('meuZap', dados[0].zap);
+  document.getElementById('salvo').innerText='✅ Salvo! '+dados.map(d=>d.nome).join(', ');
 }
-let salvo = localStorage.getItem('meuZap');
-if(salvo){ document.getElementById('zap').value = salvo; document.getElementById('salvo').innerText = '✅ Número salvo: ' + salvo; }
+function gerarProtocolo(){
+  let ano=new Date().getFullYear();
+  let num=Math.floor(10000 + Math.random()*89999);
+  return 'SOS-'+ano+'-'+num;
+}
+function compartilharLoc(){
+  if(!minhaLat){ alert('Ative o GPS e espere um pouco!'); return; }
+  let link='https://maps.google.com/?q='+minhaLat+','+minhaLng;
+  if(navigator.share){ navigator.share({title:'Minha localização', text:'Estou aqui:', url:link}); }
+  else{ window.open(link,'_blank'); }
+}
+function enviarSOSAutomatico(){
+  let dados=JSON.parse(localStorage.getItem('meusContatos')||'[]');
+  if(dados.length==0){
+    let antigo=localStorage.getItem('meuZap');
+    if(antigo) dados=[{nome:'Contato', zap:antigo}];
+  }
+  if(dados.length==0){ alert('Cadastre pelo menos 1 contato primeiro lá embaixo!'); return; }
+  let nome=localStorage.getItem('nomeUser')||'Não informado';
+  let cpf=localStorage.getItem('cpfUser')||'Não informado';
+  let status=document.getElementById('statusSOS');
+  status.innerText='⏳ Gerando protocolo e pegando localização...';
+  let fazerEnvio=()=>{
+    let protocolo=gerarProtocolo();
+    let dataHora=new Date().toLocaleString('pt-BR');
+    let ocorrencia=document.getElementById('ocorrencia').value;
+    let locLink=(minhaLat && minhaLng) ? 'https://maps.google.com/?q='+minhaLat+','+minhaLng : 'Localização não disponível - GPS desligado';
+    let msg='🚨 ALERTA SOS TERESINA - CICC\n\nPROTOCOLO: '+protocolo+'\nDATA/HORA: '+dataHora+'\nNOME: '+nome+'\nCPF: '+cpf+'\nOCORRÊNCIA: '+ocorrencia+'\nLOCALIZAÇÃO: '+locLink+'\n\nPRECISO DE AJUDA URGENTE!';
+    let prev=document.getElementById('preview');
+    prev.style.display='block';
+    prev.innerText=msg;
+    status.innerText='✅ Alerta gerado! Abrindo WhatsApp...';
+    if(minhaLat){
+      let mapa=document.getElementById('mapa');
+      mapa.src='https://maps.google.com/maps?q='+minhaLat+','+minhaLng+'&z=16&output=embed';
+      mapa.style.display='block';
+    }
+    dados.forEach((c,idx)=>{
+      setTimeout(()=>{ window.open('https://wa.me/55'+c.zap+'?text='+encodeURIComponent(msg),'_blank'); }, idx*900);
+    });
+    if(dados.length>1) setTimeout(()=>{ alert('Vai abrir '+dados.length+' conversas, uma pra cada contato! É só apertar ENVIAR em cada uma!'); },600);
+  };
+  if(minhaLat && minhaLng){ fazerEnvio(); }
+  else{
+    navigator.geolocation.getCurrentPosition(p=>{ minhaLat=p.coords.latitude; minhaLng=p.coords.longitude; fazerEnvio(); }, ()=>{ fazerEnvio(); },{enableHighAccuracy:true, timeout:8000});
+  }
+}
+let nSalvo=localStorage.getItem('nomeUser');
+if(nSalvo){ document.getElementById('nomeUser').value=nSalvo; document.getElementById('salvoDados').innerText='✅ Salvo: '+nSalvo; }
+let cpfSalvo=localStorage.getItem('cpfUser');
+if(cpfSalvo) document.getElementById('cpfUser').value=cpfSalvo;
+let salvos=JSON.parse(localStorage.getItem('meusContatos')||'[]');
+salvos.forEach((c,i)=>{ if(i<3){ document.getElementById('nome'+(i+1)).value=c.nome; document.getElementById('zap'+(i+1)).value=c.zap; } });
+if(salvos.length>0) document.getElementById('salvo').innerText='✅ Salvos: '+salvos.map(d=>d.nome).join(', ');
 </script>
 </body>
 </html>
