@@ -16,6 +16,7 @@ header p{margin:5px 0 0}
 .btn.orange{background:#ff7b00}
 input{padding:13px;width:85%;font-size:18px;border-radius:10px;border:1px solid #ccc;text-align:center}
 .btnSalvar{padding:13px 25px;border:0;background:#25D366;color:#fff;font-size:17px;border-radius:10px;font-weight:bold}
+#mapa{width:100%;height:300px;border:0;border-radius:12px;display:none;margin-top:10px}
 small{color:#666}
 </style>
 </head>
@@ -33,7 +34,7 @@ small{color:#666}
 
 <div class="card">
 <h3>💬 Seu Contato de Emergência</h3>
-<p>Cadastre o número de quem vai te ajudar:<br><small>Ex: mãe, marido, vizinho</small></p>
+<p>Cadastre o número de quem vai te ajudar:</p>
 <input id="zap" placeholder="Ex: 86999999999" inputmode="numeric">
 <br><br>
 <button class="btnSalvar" onclick="salvarZap()">Salvar Número</button>
@@ -43,8 +44,10 @@ small{color:#666}
 
 <div class="card">
 <h3>📍 Minha Localização</h3>
-<p id="loc">Aperte para ver onde você está</p>
-<button onclick="pegarLoc()" style="padding:12px 20px;border-radius:10px;border:0;background:#111;color:#fff;font-size:16px">Ver minha localização</button>
+<p id="loc">Aperte para ver você no mapa</p>
+<button onclick="pegarLoc()" style="padding:13px 20px;border-radius:10px;border:0;background:#111;color:#fff;font-size:16px">📍 Ver no Mapa</button>
+<iframe id="mapa" loading="lazy"></iframe>
+<a id="linkMapa" class="btn blue" style="display:none" href="#" target="_blank">Abrir no Google Maps</a>
 </div>
 
 <div class="card"><small>SOS Teresina 4.0 - Feito para ajudar</small></div>
@@ -59,13 +62,22 @@ function salvarZap(){
 function abrirZap(){
   let n = localStorage.getItem('meuZap');
   if(!n){ alert('Cadastre o número primeiro!'); return; }
-  window.open('https://wa.me/55'+n+'?text='+encodeURIComponent('🚨 SOS! Preciso de ajuda! Me ajuda por favor!'), '_blank');
+  let msg = '🚨 SOS! Preciso de ajuda! Me ajuda por favor!';
+  window.open('https://wa.me/55'+n+'?text='+encodeURIComponent(msg), '_blank');
 }
 function pegarLoc(){
-  document.getElementById('loc').innerText='Buscando...';
+  document.getElementById('loc').innerText='Buscando sua localização...';
   navigator.geolocation.getCurrentPosition(p=>{
-    document.getElementById('loc').innerHTML='Você está aqui:<br>https://maps.google.com/?q='+p.coords.latitude+','+p.coords.longitude;
-  },()=>{document.getElementById('loc').innerText='Ative o GPS e tente de novo';});
+    let lat = p.coords.latitude;
+    let lng = p.coords.longitude;
+    let mapa = document.getElementById('mapa');
+    mapa.src = 'https://maps.google.com/maps?q='+lat+','+lng+'&z=16&output=embed';
+    mapa.style.display = 'block';
+    let link = document.getElementById('linkMapa');
+    link.href = 'https://maps.google.com/?q='+lat+','+lng;
+    link.style.display = 'block';
+    document.getElementById('loc').innerHTML = '✅ Você está aqui! 👇';
+  },()=>{document.getElementById('loc').innerText='Ative o GPS e tente de novo';},{enableHighAccuracy:true});
 }
 let salvo = localStorage.getItem('meuZap');
 if(salvo){ document.getElementById('zap').value = salvo; document.getElementById('salvo').innerText = '✅ Número salvo: ' + salvo; }
