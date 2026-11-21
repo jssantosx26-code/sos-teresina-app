@@ -3,46 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOS Teresina</title>
+<title>SOS Teresina 3.0</title>
 <style>
 body{font-family:Arial,sans-serif;text-align:center;background:#fff5f5;margin:0;padding:20px}
-h1{color:#d32f2f;font-size:32px;margin-bottom:5px}
+h1{color:#d32f2f;font-size:30px;margin-bottom:5px}
 p{color:#555}
+input,select{width:100%;max-width:320px;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #ccc;font-size:16px;box-sizing:border-box}
 .panico{background:#d32f2f;color:white;border:none;padding:25px 30px;font-size:22px;font-weight:bold;border-radius:50%;width:200px;height:200px;cursor:pointer;box-shadow:0 5px 15px rgba(0,0,0,0.3);margin:20px 0}
 .whats{background:#25D366;color:white;border:none;padding:15px 20px;font-size:18px;font-weight:bold;border-radius:15px;width:100%;max-width:320px;cursor:pointer;margin:10px 0}
 .card{background:white;padding:15px;border-radius:15px;margin:12px auto;max-width:320px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
 .card a{display:block;background:#d32f2f;color:white;text-decoration:none;padding:12px;border-radius:10px;font-weight:bold;margin-top:8px}
-#msg{color:#d32f2f;font-weight:bold;margin-top:10px;font-size:18px}
+#msg{background:#fff;border:2px solid #d32f2f;padding:12px;border-radius:10px;max-width:320px;margin:10px auto;font-weight:bold;color:#333;display:none}
 </style>
 </head>
 <body>
-<h1>🚨 SOS TERESINA</h1>
-<p>Ajuda rápida quando você mais precisa</p>
+<h1>🚨 SOS TERESINA 3.0</h1>
+<p>Seus dados para gerar o protocolo</p>
+
+<input id="nome" placeholder="Seu nome completo">
+<input id="cpf" placeholder="Seu CPF (só números)">
+<select id="tipo">
+<option>🚨 Estou em perigo agora</option>
+<option>🏠 Violência doméstica</option>
+<option>🏍️ Assalto / Roubo</option>
+<option>🚑 Preciso de ambulância</option>
+<option>🔥 Incêndio</option>
+<option>👀 Vi algo suspeito</option>
+</select>
 
 <button class="panico" onclick="panico()">BOTÃO<br>DE PÂNICO</button>
 <div id="msg"></div>
 
-<button class="whats" onclick="enviarLocalizacao()">📍 ENVIAR MINHA LOCALIZAÇÃO NO WHATSAPP</button>
+<button class="whats" onclick="enviarLocalizacao()">📍 ENVIAR ALERTA COM PROTOCOLO NO WHATSAPP</button>
 
-<div class="card"><h3>🚓 Polícia Militar</h3><p>Emergência 24h</p><a href="tel:190">LIGAR 190</a></div>
-<div class="card"><h3>🚑 SAMU</h3><p>Ambulância 24h</p><a href="tel:192">LIGAR 192</a></div>
-<div class="card"><h3>🔥 Bombeiros</h3><p>Incêndio e resgate</p><a href="tel:193">LIGAR 193</a></div>
+<div class="card"><h3>🚓 Polícia Militar</h3><a href="tel:190">LIGAR 190</a></div>
+<div class="card"><h3>🚑 SAMU</h3><a href="tel:192">LIGAR 192</a></div>
+<div class="card"><h3>🔥 Bombeiros</h3><a href="tel:193">LIGAR 193</a></div>
 
 <script>
+let protocoloAtual = "";
 function panico(){
-document.getElementById('msg').innerText='🚨 ALERTA ENVIADO! Fique calma, ajuda está a caminho.';
-alert('ALERTA ENVIADO! Fique calma.');
+let nome = document.getElementById('nome').value || "Não informado";
+let tipo = document.getElementById('tipo').value;
+let numero = Math.floor(10000 + Math.random()*90000);
+protocoloAtual = "SOS-2026-" + numero;
+let agora = new Date().toLocaleString('pt-BR');
+let div = document.getElementById('msg');
+div.style.display = 'block';
+div.innerHTML = "✅ PROTOCOLO GERADO<br><b>" + protocoloAtual + "</b><br>" + agora + "<br>" + tipo + "<br>Nome: " + nome + "<br><br>Anote esse número! Ele é a prova do seu pedido de ajuda.";
+alert('PROTOCOLO ' + protocoloAtual + ' GERADO! Agora aperte o botão verde para enviar.');
 }
 function enviarLocalizacao(){
-if(!navigator.geolocation){alert('Seu celular não permite pegar localização');return;}
+if(!protocoloAtual){ alert('Aperte primeiro o BOTÃO DE PÂNICO para gerar o protocolo!'); return; }
+if(!navigator.geolocation){alert('Ative a localização');return;}
 document.getElementById('msg').innerText='Pegando sua localização...';
 navigator.geolocation.getCurrentPosition(function(pos){
-var lat=pos.coords.latitude;
-var lon=pos.coords.longitude;
-var link='https://maps.google.com/?q='+lat+','+lon;
-var texto='SOCORRO! Preciso de ajuda! Minha localização: '+link;
+let lat=pos.coords.latitude;
+let lon=pos.coords.longitude;
+let link='https://maps.google.com/?q='+lat+','+lon;
+let nome=document.getElementById('nome').value || "Não informado";
+let cpf=document.getElementById('cpf').value || "Não informado";
+let tipo=document.getElementById('tipo').value;
+let agora=new Date().toLocaleString('pt-BR');
+let texto='🚨 ALERTA SOS TERESINA - CICC\n\nPROTOCOLO: '+protocoloAtual+'\nDATA/HORA: '+agora+'\nNOME: '+nome+'\nCPF: '+cpf+'\nOCORRÊNCIA: '+tipo+'\nLOCALIZAÇÃO: '+link+'\n\nPRECISO DE AJUDA URGENTE!';
 window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank');
-document.getElementById('msg').innerText='Localização pronta! Escolha pra quem enviar no WhatsApp.';
 },function(){alert('Ative a localização do celular e tente de novo.');});
 }
 </script>
