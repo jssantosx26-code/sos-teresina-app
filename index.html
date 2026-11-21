@@ -8,105 +8,68 @@
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8;padding-bottom:110px}
 .topo{background:#fff;padding:28px 20px 10px;text-align:center}
-.topo h1{margin:0;color:#0b3d91;font-size:42px;font-weight:900;letter-spacing:-1px}
-.topo p{margin:6px 0 0;color:#555;font-size:16px}
-.locCard{background:#eef4ff;margin:18px 16px 5px;padding:14px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.locCard .esq{display:flex;align-items:center;gap:10px;text-align:left}
-.locCard .pin{font-size:32px}
-.locCard b{font-size:15px}
-.locCard span{font-size:14px;color:#333}
-.btnShare{background:#fff;border:2px solid #0b6ed6;color:#0b6ed6;border-radius:12px;padding:10px 12px;font-weight:bold;font-size:13px;cursor:pointer}
-h2{padding:0 20px;font-size:24px;margin:22px 0 12px}
-.cardServico{margin:12px 16px;border-radius:20px;padding:20px;display:flex;align-items:center;gap:16px;text-decoration:none;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.topo h1{margin:0;color:#0b3d91;font-size:42px;font-weight:900}
+.topo p{margin:6px 0 0;color:#555}
+.locCard{background:#eef4ff;margin:18px 16px 5px;padding:14px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.btnShare{background:#fff;border:2px solid #0b6ed6;color:#0b6ed6;border-radius:12px;padding:10px 12px;font-weight:bold;cursor:pointer}
+h2{padding:0 20px;font-size:24px}
+.cardServico{margin:12px 16px;border-radius:20px;padding:20px;display:flex;align-items:center;gap:16px;text-decoration:none;color:#fff}
 .cardServico .ico{font-size:46px}
-.cardServico b{font-size:28px;display:block;line-height:1}
-.cardServico span{font-size:15px;opacity:.9}
-.azul{background:#0b5ed7}
-.vermelho{background:#e11b22}
-.branco{background:#fff;color:#111;border:1px solid #e5e5e5}
-.branco span{color:#444}
-.card{background:#fff;margin:14px 16px;padding:18px;border-radius:18px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
-.card h3{margin:0 0 8px}
+.cardServico b{font-size:28px;display:block}
+.azul{background:#0b5ed7}.vermelho{background:#e11b22}.branco{background:#fff;color:#111;border:1px solid #e5e5e5}
+.card{background:#fff;margin:14px 16px;padding:18px;border-radius:18px}
 input,select{width:100%;padding:14px;font-size:16px;border-radius:12px;border:1px solid #ddd;margin:6px 0;text-align:center}
-.btnSalvar{width:100%;padding:14px;border:0;background:#25D366;color:#fff;font-size:17px;border-radius:12px;font-weight:bold;cursor:pointer}
-.btnDark{width:100%;padding:13px;border-radius:12px;border:0;background:#111;color:#fff;font-size:15px;cursor:pointer}
+.btnSalvar{width:100%;padding:16px;border:0;background:#25D366;color:#fff;font-size:18px;border-radius:12px;font-weight:bold;cursor:pointer}
+.btnDark{width:100%;padding:13px;border-radius:12px;border:0;background:#111;color:#fff;cursor:pointer}
 .btnEditar{background:#fff;border:2px solid #0b6ed6;color:#0b6ed6;border-radius:10px;padding:8px 16px;font-weight:bold;cursor:pointer}
-.contatoBox{background:#f8f8f8;padding:12px;border-radius:12px;margin:8px 0;text-align:left}
+.contatoBox{background:#f8f8f8;padding:12px;border-radius:12px;margin:8px 0}
 #preview{white-space:pre-wrap;background:#fff3f3;border:1px dashed #d60000;padding:14px;border-radius:12px;text-align:left;font-size:13px;display:none;margin-top:10px}
 #mapa{width:100%;height:280px;border:0;border-radius:14px;display:none;margin-top:10px}
 .panico{position:fixed;right:18px;bottom:20px;z-index:99;text-align:center;cursor:pointer}
-.panico .bola{width:92px;height:92px;background:#e11b22;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:56px;font-weight:900;box-shadow:0 8px 20px rgba(225,27,34,.5);border:4px solid #fff}
-.panico b{color:#c00;font-size:18px;display:block;margin-top:4px}
-.rodape{padding:0 20px;display:flex;gap:8px;align-items:flex-start;color:#666;font-size:13px;text-align:left;margin-top:18px}
+.panico .bola{width:92px;height:92px;background:#e11b22;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:56px;font-weight:900;border:4px solid #fff}
+.panico b{color:#c00;font-size:18px}
 .dadosOcultos{background:#eaf7ee;border:1px solid #25D366;padding:14px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left}
 </style>
 </head>
 <body>
 
-<div class="topo">
-<h1>SOS Teresina</h1>
-<p>Segurança Pública • Teresina — PI</p>
-</div>
+<div class="topo"><h1>SOS Teresina</h1><p>Segurança Pública • Teresina — PI</p></div>
 
-<div class="locCard">
-<div class="esq"><div class="pin">📍</div><div><b>Sua localização:</b><br><span id="textoLoc">Buscando... ative o GPS</span></div></div>
-<button class="btnShare" onclick="compartilharLoc()">⤴ Compartilhar<br>localização</button>
-</div>
+<div class="locCard"><div><b>Sua localização:</b><br><span id="textoLoc">Buscando... ative o GPS</span></div><button class="btnShare" onclick="compartilharLoc()">⤴ Compartilhar<br>localização</button></div>
 
 <h2>Serviços de Emergência</h2>
-
-<a class="cardServico azul" href="tel:190"><div class="ico">🛡️</div><div><b>Polícia 190</b><span>Acionar a Polícia Militar</span></div></a>
-<a class="cardServico vermelho" href="tel:193"><div class="ico">🚒</div><div><b>Bombeiro 193</b><span>Solicitar o Corpo de Bombeiros</span></div></a>
-<a class="cardServico branco" href="tel:192"><div class="ico">➕</div><div><b>SAMU 192</b><span>Chamar Atendimento SAMU</span></div></a>
+<a class="cardServico azul" href="tel:190"><div class="ico">🛡️</div><div><b>Polícia 190</b><br><span>Acionar a Polícia Militar</span></div></a>
+<a class="cardServico vermelho" href="tel:193"><div class="ico">🚒</div><div><b>Bombeiro 193</b><br><span>Solicitar o Corpo de Bombeiros</span></div></a>
+<a class="cardServico branco" href="tel:192"><div class="ico">➕</div><div><b>SAMU 192</b><br><span>Chamar Atendimento SAMU</span></div></a>
 
 <div class="card">
 <h3>👤 Meus Dados - CICC</h3>
-
-<!-- FORMULÁRIO - some depois de salvar -->
 <div id="formDados">
-<p><small>Digite uma vez só, depois some da tela por segurança!</small></p>
 <input id="nomeUser" placeholder="Nome completo">
-<input id="cpfUser" placeholder="CPF ex: 057.015.653-00" inputmode="numeric" oninput="formatarCPF(this)">
-<button class="btnSalvar" onclick="salvarDados()">✅ Salvar Meus Dados</button>
-<p id="salvoDados" style="color:green;font-weight:bold"></p>
+<input id="cpfUser" placeholder="CPF ex: 05701565300" inputmode="numeric">
+<button type="button" class="btnSalvar" onclick="salvarDados()">✅ SALVAR MEUS DADOS E OCULTAR</button>
+<p id="msgDados" style="color:green;font-weight:bold;text-align:center"></p>
 </div>
-
-<!-- RESUMO OCULTO - aparece depois de salvar -->
 <div id="dadosSalvos" class="dadosOcultos" style="display:none">
-<div>
-<div style="font-size:20px">🔒</div>
-<b>✅ Dados salvos e ocultos</b><br>
-<span id="resumoDados" style="color:#333;font-size:14px"></span><br>
-<small>Seus dados completos vão no alerta SOS, mas não ficam visíveis aqui.</small>
+<div><b>✅ Dados salvos e ocultos</b><br><span id="resumoDados"></span><br><small>Não ficam visíveis, mas vão completos no SOS.</small></div>
+<button type="button" class="btnEditar" onclick="editarDados()">✏️ Editar</button>
 </div>
-<button class="btnEditar" onclick="editarDados()">✏️ Editar</button>
-</div>
-
 </div>
 
 <div class="card">
-<h3>💬 Meus 3 Contatos de Emergência</h3>
-
-<!-- FORM CONTATOS -->
+<h3>💬 Meus 3 Contatos</h3>
 <div id="formContatos">
-<button class="btnDark" onclick="escolherContato()">📱 Escolher dos Contatos do Celular</button>
-<div class="contatoBox"><b>Contato 1:</b><input id="nome1" placeholder="Nome ex: Mãe"><input id="zap1" placeholder="Ex: 86999999999" inputmode="numeric"></div>
-<div class="contatoBox"><b>Contato 2:</b><input id="nome2" placeholder="Nome ex: Marido"><input id="zap2" placeholder="Ex: 86888888888" inputmode="numeric"></div>
-<div class="contatoBox"><b>Contato 3:</b><input id="nome3" placeholder="Nome ex: Vizinho"><input id="zap3" placeholder="Ex: 86777777777" inputmode="numeric"></div>
-<button class="btnSalvar" onclick="salvarContatos()">✅ Salvar Meus 3 Contatos</button>
-<p id="salvo" style="color:green;font-weight:bold"></p>
+<button type="button" class="btnDark" onclick="escolherContato()">📱 Escolher dos Contatos do Celular</button>
+<div class="contatoBox"><b>Contato 1:</b><input id="nome1" placeholder="Nome ex: Mãe"><input id="zap1" placeholder="86999999999" inputmode="numeric"></div>
+<div class="contatoBox"><b>Contato 2:</b><input id="nome2" placeholder="Nome ex: Marido"><input id="zap2" placeholder="86888888888" inputmode="numeric"></div>
+<div class="contatoBox"><b>Contato 3:</b><input id="nome3" placeholder="Nome ex: Vizinho"><input id="zap3" placeholder="86777777777" inputmode="numeric"></div>
+<button type="button" class="btnSalvar" onclick="salvarContatos()">✅ SALVAR CONTATOS E OCULTAR</button>
+<p id="msgContatos" style="color:green;font-weight:bold;text-align:center"></p>
 </div>
-
-<!-- RESUMO CONTATOS OCULTO -->
 <div id="contatosSalvos" class="dadosOcultos" style="display:none">
-<div>
-<div style="font-size:20px">🔒</div>
-<b>✅ Contatos salvos e ocultos</b><br>
-<span id="resumoContatos" style="color:#333;font-size:14px"></span>
+<div><b>✅ Contatos salvos e ocultos</b><br><span id="resumoContatos"></span></div>
+<button type="button" class="btnEditar" onclick="editarContatos()">✏️ Editar</button>
 </div>
-<button class="btnEditar" onclick="editarContatos()">✏️ Editar</button>
-</div>
-
 </div>
 
 <div class="card" style="border:2px solid #e11b22">
@@ -124,147 +87,119 @@ input,select{width:100%;padding:14px;font-size:16px;border-radius:12px;border:1p
 <p id="statusSOS" style="font-weight:bold;text-align:center"></p>
 <div id="preview"></div>
 <iframe id="mapa" loading="lazy"></iframe>
-<p style="text-align:center"><small>Aperte o botão PÂNICO vermelho para enviar o alerta!</small></p>
 </div>
 
-<div class="rodape">
-<div style="font-size:22px">🛡️</div>
-<div>Uso exclusivo para emergências reais •<br>Liga diretamente para o serviço</div>
-</div>
-
-<div class="panico" onclick="enviarSOSAutomatico()">
-<div class="bola">!</div>
-<b>PÂNICO</b>
-</div>
+<div class="panico" onclick="enviarSOSAutomatico()"><div class="bola">!</div><b>PÂNICO</b></div>
 
 <script>
-let contatoAtual=1;
-let minhaLat=null, minhaLng=null;
-let bairroAtual='Centro, Teresina - PI';
-
+var minhaLat=null, minhaLng=null;
 if(navigator.geolocation){
-  navigator.geolocation.watchPosition(p=>{
-    minhaLat=p.coords.latitude; minhaLng=p.coords.longitude;
-    document.getElementById('textoLoc').innerText = bairroAtual + ' • GPS ativo';
-  },()=>{ document.getElementById('textoLoc').innerText = bairroAtual; },{enableHighAccuracy:true});
+  navigator.geolocation.watchPosition(function(p){ minhaLat=p.coords.latitude; minhaLng=p.coords.longitude; document.getElementById('textoLoc').innerText='GPS ativo • Teresina - PI'; },function(){}, {enableHighAccuracy:true});
 }
-
-function formatarCPF(input){
-  let v=input.value.replace(/\D/g,'').slice(0,11);
-  if(v.length>9) v=v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/,'$1.$2.$3-$4');
-  else if(v.length>6) v=v.replace(/(\d{3})(\d{3})(\d{1,3})/,'$1.$2.$3');
-  else if(v.length>3) v=v.replace(/(\d{3})(\d{1,3})/,'$1.$2');
-  input.value=v;
-}
-// Esconde nome e CPF, mostra só mascarado
-function mascararNome(nome){
-  let partes=nome.trim().split(' ');
-  if(partes.length==1) return partes[0].charAt(0)+'***';
-  return partes[0]+' '+partes[partes.length-1].charAt(0)+'***';
-}
-function mascararCPF(cpf){
-  let limpo=cpf.replace(/\D/g,'');
-  if(limpo.length==11) return '***.***.'+limpo.slice(6,9)+'-'+limpo.slice(9);
-  return '***.***.***-**';
-}
-function mostrarDadosOcultos(){
-  let nome=localStorage.getItem('nomeUser')||'';
-  let cpf=localStorage.getItem('cpfUser')||'';
-  if(nome && cpf){
-    document.getElementById('formDados').style.display='none';
-    document.getElementById('dadosSalvos').style.display='flex';
-    document.getElementById('resumoDados').innerText = mascararNome(nome)+' | CPF: '+mascararCPF(cpf);
-  }
+function salvarDados(){
+  var nome=document.getElementById('nomeUser').value.trim();
+  var cpf=document.getElementById('cpfUser').value.trim();
+  alert('Botão clicado! Nome: '+nome+' CPF: '+cpf);
+  if(!nome){ alert('❌ Coloque seu nome primeiro!'); return; }
+  if(!cpf){ alert('❌ Coloque seu CPF primeiro!'); return; }
+  try{
+    localStorage.setItem('nomeUser', nome);
+    localStorage.setItem('cpfUser', cpf);
+  }catch(e){ alert('Erro ao salvar: '+e); return; }
+  document.getElementById('msgDados').innerText='Salvo!';
+  // ESCONDE NA HORA
+  document.getElementById('formDados').style.display='none';
+  document.getElementById('dadosSalvos').style.display='flex';
+  var partes=nome.split(' ');
+  var nomeCurto=partes[0]+' '+(partes.length>1?partes[partes.length-1].charAt(0)+'***':'');
+  var cpfLimpo=cpf.replace(/\D/g,'');
+  var cpfMask='***.***.'+cpfLimpo.slice(6,9)+'-'+cpfLimpo.slice(9);
+  document.getElementById('resumoDados').innerText=nomeCurto+' | CPF: '+cpfMask;
+  alert('✅ SALVO E OCULTO COM SUCESSO!');
 }
 function editarDados(){
   document.getElementById('formDados').style.display='block';
   document.getElementById('dadosSalvos').style.display='none';
-  document.getElementById('salvoDados').innerText='✏️ Editando... aperte Salvar de novo quando terminar';
 }
-function salvarDados(){
-  let nome=document.getElementById('nomeUser').value.trim();
-  let cpf=document.getElementById('cpfUser').value.trim();
-  if(!nome){ alert('Coloque seu nome!'); return; }
-  if(!cpf){ alert('Coloque seu CPF!'); return; }
-  localStorage.setItem('nomeUser', nome);
-  localStorage.setItem('cpfUser', cpf);
-  alert('✅ Salvo! Seus dados vão ficar ocultos agora por segurança!');
-  mostrarDadosOcultos();
-}
-function mostrarContatosOcultos(){
-  let dados=JSON.parse(localStorage.getItem('meusContatos')||'[]');
-  if(dados.length>0){
-    document.getElementById('formContatos').style.display='none';
-    document.getElementById('contatosSalvos').style.display='flex';
-    document.getElementById('resumoContatos').innerText = dados.length+' contato(s) salvos: '+dados.map(d=>{
-      let n=d.nome.split(' ')[0];
-      let z=d.zap.slice(-4);
-      return n+' (****'+z+')';
-    }).join(', ');
+function salvarContatos(){
+  var dados=[];
+  for(var i=1;i<=3;i++){
+    var nome=document.getElementById('nome'+i).value;
+    var zap=document.getElementById('zap'+i).value.replace(/\D/g,'');
+    if(zap) dados.push({nome:nome||'Contato '+i, zap:zap});
   }
+  if(dados.length==0){ alert('❌ Coloque pelo menos 1 número!'); return; }
+  localStorage.setItem('meusContatos', JSON.stringify(dados));
+  localStorage.setItem('meuZap', dados[0].zap);
+  document.getElementById('formContatos').style.display='none';
+  document.getElementById('contatosSalvos').style.display='flex';
+  document.getElementById('resumoContatos').innerText=dados.length+' contato(s): '+dados.map(function(d){ return d.nome.split(' ')[0]+' (****'+d.zap.slice(-4)+')'; }).join(', ');
+  alert('✅ CONTATOS SALVOS E OCULTOS!');
 }
 function editarContatos(){
   document.getElementById('formContatos').style.display='block';
   document.getElementById('contatosSalvos').style.display='none';
 }
-function salvarContatos(){
-  let dados=[];
-  for(let i=1;i<=3;i++){
-    let nome=document.getElementById('nome'+i).value;
-    let zap=document.getElementById('zap'+i).value.replace(/\D/g,'');
-    if(zap) dados.push({nome:nome||'Contato '+i, zap:zap});
-  }
-  if(dados.length==0){ alert('Coloque pelo menos 1 número!'); return; }
-  localStorage.setItem('meusContatos', JSON.stringify(dados));
-  localStorage.setItem('meuZap', dados[0].zap);
-  alert('✅ Contatos salvos e ocultos!');
-  mostrarContatosOcultos();
-}
-async function escolherContato(){
+function escolherContato(){
   if(navigator.contacts && navigator.contacts.select){
-    try{
-      let cts=await navigator.contacts.select(['name','tel'],{multiple:false});
+    navigator.contacts.select(['name','tel'],{multiple:false}).then(function(cts){
       if(cts.length>0){
-        let c=cts[0];
-        let nome=c.name?c.name[0]:'';
-        let tel=c.tel?c.tel[0].replace(/\D/g,''):'';
+        var c=cts[0];
+        var nome=c.name?c.name[0]:'';
+        var tel=c.tel?c.tel[0].replace(/\D/g,''):'';
         if(tel.startsWith('55') && tel.length>11) tel=tel.substring(2);
-        document.getElementById('nome'+contatoAtual).value=nome;
-        document.getElementById('zap'+contatoAtual).value=tel;
-        alert('Contato '+contatoAtual+' preenchido: '+nome);
-        contatoAtual++; if(contatoAtual>3) contatoAtual=1;
-        return;
+        document.getElementById('nome1').value=nome;
+        document.getElementById('zap1').value=tel;
+        alert('Contato 1 preenchido: '+nome);
       }
-    }catch(e){}
-  }
-  alert('Digite o nome e número na mão!');
-}
-function gerarProtocolo(){
-  let ano=new Date().getFullYear();
-  let num=Math.floor(10000 + Math.random()*89999);
-  return 'SOS-'+ano+'-'+num;
+    });
+  } else { alert('Digite na mão!'); }
 }
 function compartilharLoc(){
-  if(!minhaLat){ alert('Ative o GPS e espere um pouco!'); return; }
-  let link='https://maps.google.com/?q='+minhaLat+','+minhaLng;
-  if(navigator.share){ navigator.share({title:'Minha localização', text:'Estou aqui:', url:link}); }
-  else{ window.open(link,'_blank'); }
+  if(!minhaLat){ alert('Ative o GPS!'); return; }
+  window.open('https://maps.google.com/?q='+minhaLat+','+minhaLng,'_blank');
 }
 function enviarSOSAutomatico(){
-  let dados=JSON.parse(localStorage.getItem('meusContatos')||'[]');
-  if(dados.length==0){
-    let antigo=localStorage.getItem('meuZap');
-    if(antigo) dados=[{nome:'Contato', zap:antigo}];
+  var dados=JSON.parse(localStorage.getItem('meusContatos')||'[]');
+  if(dados.length==0){ alert('Cadastre 1 contato primeiro!'); return; }
+  var nome=localStorage.getItem('nomeUser')||'Não informado';
+  var cpf=localStorage.getItem('cpfUser')||'Não informado';
+  var status=document.getElementById('statusSOS');
+  status.innerText='⏳ Gerando alerta...';
+  var fazer=function(){
+    var protocolo='SOS-'+new Date().getFullYear()+'-'+Math.floor(10000+Math.random()*89999);
+    var dataHora=new Date().toLocaleString('pt-BR');
+    var ocorrencia=document.getElementById('ocorrencia').value;
+    var locLink=(minhaLat&&minhaLng)?'https://maps.google.com/?q='+minhaLat+','+minhaLng:'GPS desligado';
+    var msg='🚨 ALERTA SOS TERESINA - CICC\n\nPROTOCOLO: '+protocolo+'\nDATA/HORA: '+dataHora+'\nNOME: '+nome+'\nCPF: '+cpf+'\nOCORRÊNCIA: '+ocorrencia+'\nLOCALIZAÇÃO: '+locLink+'\n\nPRECISO DE AJUDA URGENTE!';
+    var prev=document.getElementById('preview');
+    prev.style.display='block'; prev.innerText=msg;
+    status.innerText='✅ Alerta gerado!';
+    if(minhaLat){ var m=document.getElementById('mapa'); m.src='https://maps.google.com/maps?q='+minhaLat+','+minhaLng+'&z=16&output=embed'; m.style.display='block'; }
+    dados.forEach(function(c,idx){ setTimeout(function(){ window.open('https://wa.me/55'+c.zap+'?text='+encodeURIComponent(msg),'_blank'); }, idx*900); });
+  };
+  if(minhaLat&&minhaLng){ fazer(); } else { navigator.geolocation.getCurrentPosition(function(p){ minhaLat=p.coords.latitude; minhaLng=p.coords.longitude; fazer(); }, function(){ fazer(); }, {enableHighAccuracy:true, timeout:8000}); }
+}
+// Ao abrir, se já tem salvo, já deixa oculto
+try{
+  var n=localStorage.getItem('nomeUser');
+  var c=localStorage.getItem('cpfUser');
+  if(n) document.getElementById('nomeUser').value=n;
+  if(c) document.getElementById('cpfUser').value=c;
+  if(n && c){
+    document.getElementById('formDados').style.display='none';
+    document.getElementById('dadosSalvos').style.display='flex';
+    var partes=n.split(' ');
+    document.getElementById('resumoDados').innerText=partes[0]+' '+(partes.length>1?partes[partes.length-1].charAt(0)+'***':'')+' | CPF: ***.***.'+c.replace(/\D/g,'').slice(6,9)+'-'+c.replace(/\D/g,'').slice(9);
   }
-  if(dados.length==0){ alert('Cadastre pelo menos 1 contato primeiro!'); return; }
-  let nome=localStorage.getItem('nomeUser')||'Não informado';
-  let cpf=localStorage.getItem('cpfUser')||'Não informado';
-  let status=document.getElementById('statusSOS');
-  status.innerText='⏳ Gerando protocolo e pegando localização...';
-  let fazerEnvio=()=>{
-    let protocolo=gerarProtocolo();
-    let dataHora=new Date().toLocaleString('pt-BR');
-    let ocorrencia=document.getElementById('ocorrencia').value;
-    let locLink=(minhaLat && minhaLng) ? 'https://maps.google.com/?q='+minhaLat+','+minhaLng : 'Localização não disponível - GPS desligado';
-    // O alerta que vai no WhatsApp continua COMPLETO, com nome e CPF cheios
-    let msg='🚨 ALERTA SOS TERESINA -
+  var salvos=JSON.parse(localStorage.getItem('meusContatos')||'[]');
+  salvos.forEach(function(cc,i){ if(i<3){ document.getElementById('nome'+(i+1)).value=cc.nome; document.getElementById('zap'+(i+1)).value=cc.zap; } });
+  if(salvos.length>0){
+    document.getElementById('formContatos').style.display='none';
+    document.getElementById('contatosSalvos').style.display='flex';
+    document.getElementById('resumoContatos').innerText=salvos.length+' contato(s) salvos';
+  }
+}catch(e){}
+</script>
+</body>
+</html>
