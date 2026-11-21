@@ -6,7 +6,7 @@
 <title>SOS Teresina</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8;padding-bottom:110px}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8;padding-bottom:130px}
 .topo{background:#fff;padding:28px 20px 10px;text-align:center}
 .topo h1{margin:0;color:#0b3d91;font-size:42px;font-weight:900}
 .topo p{margin:6px 0 0;color:#555}
@@ -23,11 +23,11 @@ input,select{width:100%;padding:14px;font-size:16px;border-radius:12px;border:1p
 .btnDark{width:100%;padding:13px;border-radius:12px;border:0;background:#111;color:#fff;cursor:pointer}
 .btnEditar{background:#fff;border:2px solid #0b6ed6;color:#0b6ed6;border-radius:10px;padding:8px 16px;font-weight:bold;cursor:pointer}
 .contatoBox{background:#f8f8f8;padding:12px;border-radius:12px;margin:8px 0}
-#preview{white-space:pre-wrap;background:#fff3f3;border:1px dashed #d60000;padding:14px;border-radius:12px;text-align:left;font-size:13px;display:none;margin-top:10px}
+#preview{white-space:pre-wrap;word-break:break-all;background:#fff3f3;border:1px dashed #d60000;padding:14px;border-radius:12px;text-align:left;font-size:13px;display:none;margin-top:10px;margin-bottom:20px}
 #mapa{width:100%;height:280px;border:0;border-radius:14px;display:none;margin-top:10px}
-.panico{position:fixed;right:18px;bottom:20px;z-index:99;text-align:center;cursor:pointer}
-.panico .bola{width:92px;height:92px;background:#e11b22;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:56px;font-weight:900;border:4px solid #fff}
-.panico b{color:#c00;font-size:18px}
+.panico{position:fixed;right:16px;bottom:16px;z-index:99;text-align:center;cursor:pointer}
+.panico .bola{width:80px;height:80px;background:#e11b22;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:48px;font-weight:900;border:4px solid #fff;box-shadow:0 6px 16px rgba(0,0,0,.3)}
+.panico b{color:#c00;font-size:16px;background:#fff;padding:2px 8px;border-radius:8px}
 .dadosOcultos{background:#eaf7ee;border:1px solid #25D366;padding:14px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left}
 </style>
 </head>
@@ -46,7 +46,7 @@ input,select{width:100%;padding:14px;font-size:16px;border-radius:12px;border:1p
 <h3>👤 Meus Dados - CICC</h3>
 <div id="formDados">
 <input id="nomeUser" placeholder="Nome completo">
-<input id="cpfUser" placeholder="CPF ex: 05701565300" inputmode="numeric">
+<input id="cpfUser" placeholder="CPF ex: 057.015.653-00" inputmode="numeric" oninput="formatarCPF(this)">
 <button type="button" class="btnSalvar" onclick="salvarDados()">✅ SALVAR MEUS DADOS E OCULTAR</button>
 <p id="msgDados" style="color:green;font-weight:bold;text-align:center"></p>
 </div>
@@ -64,7 +64,6 @@ input,select{width:100%;padding:14px;font-size:16px;border-radius:12px;border:1p
 <div class="contatoBox"><b>Contato 2:</b><input id="nome2" placeholder="Nome ex: Marido"><input id="zap2" placeholder="86888888888" inputmode="numeric"></div>
 <div class="contatoBox"><b>Contato 3:</b><input id="nome3" placeholder="Nome ex: Vizinho"><input id="zap3" placeholder="86777777777" inputmode="numeric"></div>
 <button type="button" class="btnSalvar" onclick="salvarContatos()">✅ SALVAR CONTATOS E OCULTAR</button>
-<p id="msgContatos" style="color:green;font-weight:bold;text-align:center"></p>
 </div>
 <div id="contatosSalvos" class="dadosOcultos" style="display:none">
 <div><b>✅ Contatos salvos e ocultos</b><br><span id="resumoContatos"></span></div>
@@ -96,26 +95,33 @@ var minhaLat=null, minhaLng=null;
 if(navigator.geolocation){
   navigator.geolocation.watchPosition(function(p){ minhaLat=p.coords.latitude; minhaLng=p.coords.longitude; document.getElementById('textoLoc').innerText='GPS ativo • Teresina - PI'; },function(){}, {enableHighAccuracy:true});
 }
+function formatarCPF(input){
+  var v=input.value.replace(/\D/g,'').slice(0,11);
+  if(v.length>9) v=v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/,'$1.$2.$3-$4');
+  else if(v.length>6) v=v.replace(/(\d{3})(\d{3})(\d{1,3})/,'$1.$2.$3');
+  else if(v.length>3) v=v.replace(/(\d{3})(\d{1,3})/,'$1.$2');
+  input.value=v;
+  return v;
+}
+function formatarCPFTexto(cpf){
+  var v=(cpf||'').replace(/\D/g,'').slice(0,11);
+  if(v.length==11) return v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');
+  return cpf;
+}
 function salvarDados(){
   var nome=document.getElementById('nomeUser').value.trim();
-  var cpf=document.getElementById('cpfUser').value.trim();
-  alert('Botão clicado! Nome: '+nome+' CPF: '+cpf);
+  var cpfRaw=document.getElementById('cpfUser').value.trim();
+  var cpf=formatarCPFTexto(cpfRaw);
   if(!nome){ alert('❌ Coloque seu nome primeiro!'); return; }
   if(!cpf){ alert('❌ Coloque seu CPF primeiro!'); return; }
-  try{
-    localStorage.setItem('nomeUser', nome);
-    localStorage.setItem('cpfUser', cpf);
-  }catch(e){ alert('Erro ao salvar: '+e); return; }
-  document.getElementById('msgDados').innerText='Salvo!';
-  // ESCONDE NA HORA
+  localStorage.setItem('nomeUser', nome);
+  localStorage.setItem('cpfUser', cpf);
   document.getElementById('formDados').style.display='none';
   document.getElementById('dadosSalvos').style.display='flex';
   var partes=nome.split(' ');
   var nomeCurto=partes[0]+' '+(partes.length>1?partes[partes.length-1].charAt(0)+'***':'');
-  var cpfLimpo=cpf.replace(/\D/g,'');
-  var cpfMask='***.***.'+cpfLimpo.slice(6,9)+'-'+cpfLimpo.slice(9);
-  document.getElementById('resumoDados').innerText=nomeCurto+' | CPF: '+cpfMask;
-  alert('✅ SALVO E OCULTO COM SUCESSO!');
+  document.getElementById('resumoDados').innerText=nomeCurto+' | CPF: ***.***.'+cpf.slice(8,11)+'-'+cpf.slice(12);
+  alert('✅ SALVO E OCULTO! CPF formatado: '+cpf);
 }
 function editarDados(){
   document.getElementById('formDados').style.display='block';
@@ -163,7 +169,7 @@ function enviarSOSAutomatico(){
   var dados=JSON.parse(localStorage.getItem('meusContatos')||'[]');
   if(dados.length==0){ alert('Cadastre 1 contato primeiro!'); return; }
   var nome=localStorage.getItem('nomeUser')||'Não informado';
-  var cpf=localStorage.getItem('cpfUser')||'Não informado';
+  var cpf=formatarCPFTexto(localStorage.getItem('cpfUser')||'Não informado');
   var status=document.getElementById('statusSOS');
   status.innerText='⏳ Gerando alerta...';
   var fazer=function(){
@@ -180,17 +186,17 @@ function enviarSOSAutomatico(){
   };
   if(minhaLat&&minhaLng){ fazer(); } else { navigator.geolocation.getCurrentPosition(function(p){ minhaLat=p.coords.latitude; minhaLng=p.coords.longitude; fazer(); }, function(){ fazer(); }, {enableHighAccuracy:true, timeout:8000}); }
 }
-// Ao abrir, se já tem salvo, já deixa oculto
 try{
   var n=localStorage.getItem('nomeUser');
   var c=localStorage.getItem('cpfUser');
   if(n) document.getElementById('nomeUser').value=n;
-  if(c) document.getElementById('cpfUser').value=c;
+  if(c) document.getElementById('cpfUser').value=formatarCPFTexto(c);
   if(n && c){
     document.getElementById('formDados').style.display='none';
     document.getElementById('dadosSalvos').style.display='flex';
     var partes=n.split(' ');
-    document.getElementById('resumoDados').innerText=partes[0]+' '+(partes.length>1?partes[partes.length-1].charAt(0)+'***':'')+' | CPF: ***.***.'+c.replace(/\D/g,'').slice(6,9)+'-'+c.replace(/\D/g,'').slice(9);
+    var cpfF=formatarCPFTexto(c);
+    document.getElementById('resumoDados').innerText=partes[0]+' '+(partes.length>1?partes[partes.length-1].charAt(0)+'***':'')+' | CPF: ***.***.'+cpfF.slice(8,11)+'-'+cpfF.slice(12);
   }
   var salvos=JSON.parse(localStorage.getItem('meusContatos')||'[]');
   salvos.forEach(function(cc,i){ if(i<3){ document.getElementById('nome'+(i+1)).value=cc.nome; document.getElementById('zap'+(i+1)).value=cc.zap; } });
