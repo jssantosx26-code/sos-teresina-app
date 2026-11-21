@@ -3,11 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOS Teresina 4.0</title>
+<title>SOS Teresina</title>
 <style>
-body{font-family:Arial,sans-serif;text-align:center;background:#fff5f5;margin:0;padding:20px}
-h1{color:#d32f2f;font-size:28px;margin-bottom:5px}
-p{color:#555}
-input,select{width:100%;max-width:340px;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #ccc;font-size:16px;box-sizing:border-box}
-.panico{background:#d32f2f;color:white;border:none;padding:25px 30px;font-size:22px;font-weight:bold;border-radius:50%;width:200px;height:200px;cursor:pointer;box-shadow:0 5px 15px rgba(0,0,0,0.3);margin:15px 0}
-.whats{background:#25D366;color:white;border:none;padding:15px 20px;font-size:17px;font-weight:bold;border-radius:15
+body{margin:0;font-family:Arial;background:#f2f2f2;text-align:center}
+header{background:#d60000;color:#fff;padding:25px 10px}
+header h1{margin:0;font-size:32px}
+header p{margin:5px 0 0}
+.card{background:#fff;margin:15px;padding:20px;border-radius:15px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.btn{display:block;background:#d60000;color:#fff;text-decoration:none;padding:16px;border-radius:12px;font-size:20px;font-weight:bold;margin:10px 0}
+.btn.blue{background:#007bff}
+.btn.green{background:#25D366}
+.btn.orange{background:#ff7b00}
+small{color:#666}
+</style>
+</head>
+<body>
+<header>
+<h1>🚨 SOS TERESINA</h1>
+<p>Ajuda rápida em emergência</p>
+</header>
+
+<div class="card">
+<a class="btn" href="tel:190">📞 POLÍCIA - 190</a>
+<a class="btn orange" href="tel:193">🚒 BOMBEIROS - 193</a>
+<a class="btn blue" href="tel:192">🚑 SAMU - 192</a>
+<a class="btn green" href="https://wa.me/5586999999999">💬 WHATSAPP SOS</a>
+</div>
+
+<div class="card">
+<h3>📍 Minha Localização</h3>
+<p id="loc">Aperte para ver onde você está</p>
+<button onclick="pegarLoc()" style="padding:12px 20px;border-radius:10px;border:0;background:#111;color:#fff;font-size:16px">Ver minha localização</button>
+</div>
+
+<div class="card"><small>SOS Teresina 4.0 - Feito para ajudar</small></div>
+
+<script>
+function pegarLoc(){
+  document.getElementById('loc').innerText='Buscando...';
+  navigator.geolocation.getCurrentPosition(p=>{
+    document.getElementById('loc').innerHTML='Você está aqui:<br>https://maps.google.com/?q='+p.coords.latitude+','+p.coords.longitude;
+  },()=>{document.getElementById('loc').innerText='Ative o GPS e tente de novo';});
+}
+</script>
+</body>
+</html>
