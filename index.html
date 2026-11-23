@@ -3,103 +3,248 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOS Teresina - Alerta de Emergência</title>
+<title>SOS Teresina</title>
 <style>
   *{box-sizing:border-box;font-family:Arial,sans-serif}
-  body{margin:0;background:#f1f5f9;padding:15px;padding-bottom:40px}
-  .box{max-width:480px;margin:0 auto;background:white;border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
-  h1{text-align:center;color:#dc2626;margin:0;font-size:26px}
-  p.sub{text-align:center;color:#64748b;font-size:13px;margin:5px 0 15px}
-  label{font-size:13px;font-weight:bold;color:#334155;display:block;margin-top:12px}
-  input,select{width:100%;padding:13px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;margin-top:5px;outline:none}
-  input:focus{border-color:#dc2626}
-  .btn-panico{width:100%;background:#ff0000;color:white;border:none;padding:22px;border-radius:20px;font-size:24px;font-weight:bold;margin-top:18px;cursor:pointer;box-shadow:0 6px 0 #991b1b}
-  .btn-panico:active{transform:translateY(4px);box-shadow:0 2px 0 #991b1b}
-  .btn-bem{width:100%;background:#059669;color:white;border:none;padding:15px;border-radius:15px;font-size:16px;font-weight:bold;margin-top:10px;cursor:pointer}
-  .btn-salvar{width:100%;background:#0f172a;color:white;border:none;padding:14px;border-radius:12px;font-size:15px;font-weight:bold;margin-top:12px;cursor:pointer}
-  .emerg{display:flex;gap:10px;margin-top:18px}
-  .emerg a{flex:1;text-align:center;padding:14px 5px;border-radius:15px;text-decoration:none;color:white;font-weight:bold;font-size:16px}
-  .status{text-align:center;padding:10px;border-radius:10px;background:#ecfdf5;color:#065f46;font-size:13px;font-weight:bold;margin-top:12px;display:none}
-  .aviso{font-size:11px;color:#94a3b8;text-align:center;margin-top:15px;line-height:1.5}
+  body{margin:0;background:#f8fafc;padding:0;padding-bottom:110px}
+  .top{max-width:480px;margin:0 auto;background:white;padding:22px 20px 10px;border-radius:0 0 28px 28px}
+  h1{text-align:center;color:#1e3a8a;margin:0;font-size:42px;line-height:1;letter-spacing:-1px}
+  .sub{text-align:center;color:#555;font-size:16px;margin:8px 0 18px}
+  .loc{background:#eef6ff;border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .loc-left{display:flex;align-items:center;gap:8px}
+  .loc-left span{font-size:15px;font-weight:bold;color:#111;line-height:1.3}
+  .btn-loc{border:2px solid #2563eb;color:#2563eb;background:white;border-radius:10px;padding:8px 10px;font-weight:bold;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap}
+  h2{font-size:24px;margin:20px 0 14px;color:#111}
+  .card{border-radius:18px;padding:20px;display:flex;align-items:center;gap:16px;text-decoration:none;margin-bottom:14px;box-shadow:0 6px 16px rgba(0,0,0,0.08);cursor:pointer}
+  .card .icon{font-size:48px;line-height:1}
+  .card b{font-size:30px;display:block;line-height:1.1}
+  .card span{font-size:15px;opacity:0.9}
+  .card-azul{background:#1663e0;color:white}
+  .card-verm{background:#e11d2e;color:white}
+  .card-branco{background:white;color:#111;border:1px solid #e2e8f0}
+  .icon-samu{width:54px;height:54px;background:white;border:2px solid #dc2626;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+
+  /* DADOS OCULTOS */
+  .dados{max-width:480px;margin:16px auto 0;background:white;border-radius:20px;padding:18px;box-shadow:0 4px 16px rgba(0,0,0,0.06)}
+  .dados-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+  .dados-head h3{margin:0;font-size:18px}
+  .dados-head p{margin:2px 0 0;font-size:12px;color:#64748b}
+  .badge-oculto{background:#fef2f2;color:#dc2626;font-size:11px;font-weight:bold;padding:5px 9px;border-radius:20px;white-space:nowrap}
+  .badge-visivel{background:#ecfdf5;color:#065f46;font-size:11px;font-weight:bold;padding:5px 9px;border-radius:20px;white-space:nowrap}
+  .dados-corpo{display:none;margin-top:12px}
+  .dados-corpo.aberto{display:block}
+  .resumo-oculto{background:#f1f5f9;border-radius:12px;padding:12px;font-size:13px;color:#475569;line-height:1.6;margin-top:12px}
+  .resumo-oculto b{color:#0f172a}
+  label{font-size:12px;font-weight:bold;color:#334155;display:block;margin-top:10px}
+  .campo-olho{position:relative}
+  .campo-olho input{width:100%;padding:12px 44px 12px 12px;border:2px solid #e2e8f0;border-radius:12px;font-size:14px;margin-top:4px;outline:none}
+  .campo-olho select{width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:12px;font-size:14px;margin-top:4px}
+  .btn-olho{position:absolute;right:6px;top:9px;background:#e2e8f0;border:none;border-radius:8px;padding:7px 9px;font-size:16px;cursor:pointer}
+  .btn-salvar{width:100%;background:#0f172a;color:white;border:none;padding:13px;border-radius:12px;font-size:14px;font-weight:bold;margin-top:12px}
+  .status{text-align:center;padding:10px;border-radius:10px;background:#ecfdf5;color:#065f46;font-size:13px;font-weight:bold;margin-top:10px;display:none}
+  .btn-bem{width:100%;background:#065f46;color:white;border:none;padding:18px;border-radius:16px;font-size:19px;font-weight:bold;margin-top:12px;box-shadow:0 5px 0 #022c22, 0 8px 20px rgba(6,95,70,0.35);cursor:pointer}
+  .btn-bem span{font-size:12px;font-weight:normal;display:block;margin-top:2px}
+  .aviso{font-size:11px;color:#94a3b8;text-align:center;margin-top:14px;line-height:1.5}
+  .rodape{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #e2e8f0;padding:10px 18px 14px;display:flex;align-items:center;justify-content:space-between;max-width:480px;margin:0 auto}
+  .rodape small{font-size:12px;color:#444;line-height:1.4;max-width:230px;display:flex;gap:6px;align-items:flex-start}
+  .btn-panico-flutuante{width:76px;height:76px;background:#e11d2e;color:white;border:none;border-radius:50%;font-size:44px;font-weight:bold;box-shadow:0 6px 18px rgba(225,29,46,0.5);cursor:pointer;flex-shrink:0;line-height:1}
+  .label-panico{text-align:center;color:#c81e1e;font-weight:bold;font-size:15px;margin-top:2px}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:none;align-items:center;justify-content:center;padding:15px;z-index:999}
+  .modal-card{background:white;width:100%;max-width:420px;border-radius:22px;padding:22px;text-align:center}
+  .modal-card h2{margin:0 0 5px;color:#dc2626;font-size:22px;text-align:center}
+  .modal-card p{color:#64748b;font-size:13px;margin:0 0 15px}
+  .opt{width:100%;padding:14px;border-radius:14px;border:2px solid #e2e8f0;background:white;display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;text-align:left}
+  .opt.ativo{border-color:#dc2626;background:#fef2f2}
+  .opt input{width:22px;height:22px;accent-color:#dc2626}
+  .opt b{font-size:15px;display:block}
+  .opt span{font-size:12px;color:#64748b}
+  .btn-confirmar{width:100%;background:#dc2626;color:white;border:none;padding:16px;border-radius:14px;font-size:18px;font-weight:bold;margin-top:5px}
+  .btn-cancelar{width:100%;background:#e2e8f0;color:#334155;border:none;padding:12px;border-radius:12px;font-size:14px;font-weight:bold;margin-top:8px}
 </style>
 </head>
 <body>
 
-<div class="box">
-  <h1>🚨 SOS TERESINA</h1>
-  <p class="sub">Alerta de emergência em 3 segundos<br>Protótipo por Josiel Santos - Teresina / PI</p>
+<div class="top">
+  <h1>SOS Teresina</h1>
+  <div class="sub">Segurança Pública • Teresina — PI</div>
 
-  <!-- DADOS -->
-  <label>Seu nome completo</label>
-  <input id="nome" placeholder="Ex: Josiel Santos" oninput="salvar()">
-
-  <label>Seu CPF</label>
-  <input id="cpf" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" oninput="formatarCPF(this); salvar()">
-
-  <label>O que está acontecendo?</label>
-  <select id="ocorrencia" onchange="salvar()">
-    <option>Estou em perigo / Preciso de ajuda</option>
-    <option>Assalto / Roubo</option>
-    <option>Violência doméstica</option>
-    <option>Acidente / Preciso de ambulância</option>
-    <option>Incêndio</option>
-    <option>Estou sendo seguido(a)</option>
-    <option>Outro</option>
-  </select>
-
-  <label>Contato 1 - WhatsApp (DDD + número)</label>
-  <input id="c1" placeholder="86999999999" inputmode="numeric" oninput="salvar()">
-
-  <label>Contato 2 - WhatsApp</label>
-  <input id="c2" placeholder="86988888888" inputmode="numeric" oninput="salvar()">
-
-  <label>Contato 3 - WhatsApp</label>
-  <input id="c3" placeholder="86977777777" inputmode="numeric" oninput="salvar()">
-
-  <button class="btn-salvar" onclick="salvarManual()">💾 SALVAR MEUS DADOS</button>
-  <div id="status" class="status">✅ Dados salvos neste celular!</div>
-
-  <!-- BOTÃO PÂNICO -->
-  <button class="btn-panico" onclick="dispararPanico()">🚨 PÂNICO<br><span style="font-size:13px;font-weight:normal;">ALERTAR CONTATOS + LIGAR 190</span></button>
-
-  <button class="btn-bem" onclick="estouBem()">✅ ESTOU BEM - Cancelar alerta</button>
-
-  <!-- LIGAÇÃO DIRETA -->
-  <div class="emerg">
-    <a href="tel:190" style="background:#1a56db">🚔<br>190<br><span style="font-size:11px;font-weight:normal;">POLÍCIA</span></a>
-    <a href="tel:193" style="background:#dc2626">🚒<br>193<br><span style="font-size:11px;font-weight:normal;">BOMBEIROS</span></a>
-    <a href="tel:192" style="background:#059669">🚑<br>192<br><span style="font-size:11px;font-weight:normal;">SAMU</span></a>
+  <div class="loc">
+    <div class="loc-left">
+      <span style="font-size:28px">📍</span>
+      <span id="textoLocal">Sua localização:<br>Centro, Teresina - PI</span>
+    </div>
+    <button class="btn-loc" onclick="compartilharLocal()">⬆️ Compartilhar<br>localização</button>
   </div>
 
-  <p class="aviso">
-    Seus dados ficam salvos SÓ no seu celular.<br>
-    Ao apertar PÂNICO, seus contatos recebem protocolo, nome, CPF, ocorrência e sua localização exata no Google Maps.<br><br>
-    Protótipo para avaliação da CICC / SSP-PI.<br>
-    Não é um app oficial do governo.
-  </p>
+  <h2>Serviços de Emergência</h2>
+
+  <a class="card card-azul" href="tel:190">
+    <div class="icon">🛡️</div>
+    <div><b>Polícia 190</b><span>Acionar a Polícia Militar</span></div>
+  </a>
+
+  <a class="card card-verm" href="tel:193">
+    <div class="icon">🚒</div>
+    <div><b>Bombeiro 193</b><span>Solicitar o Corpo de Bombeiros</span></div>
+  </a>
+
+  <a class="card card-branco" href="tel:192">
+    <div class="icon-samu">✚</div>
+    <div><b>SAMU 192</b><span>Chamar Atendimento SAMU</span></div>
+  </a>
+</div>
+
+<!-- MEUS DADOS - OCULTOS POR PADRÃO -->
+<div class="dados">
+  <div class="dados-head" onclick="alternarDados()">
+    <div>
+      <h3>🔒 Meus dados para o alerta</h3>
+      <p>Toque para configurar. Seus dados ficam ocultos.</p>
+    </div>
+    <span id="badgeDados" class="badge-oculto">🔒 OCULTO</span>
+  </div>
+
+  <!-- RESUMO SEM EXPOR NADA -->
+  <div class="resumo-oculto" id="resumoOculto">
+    <b>Status:</b> <span id="textoStatus">Não configurado</span><br>
+    <b>Nome:</b> •••••••••<br>
+    <b>CPF:</b> •••.•••.•••-••<br>
+    <b>Contatos:</b> ••••••••• (ocultos)<br>
+    <span style="font-size:11px;color:#94a3b8;">Só você vê os dados reais ao tocar em 🔒 OCULTO. O PÂNICO funciona mesmo com os dados ocultos.</span>
+  </div>
+
+  <!-- FORMULÁRIO ESCONDIDO -->
+  <div class="dados-corpo" id="corpoDados">
+    <label>Seu nome completo</label>
+    <div class="campo-olho">
+      <input id="nome" type="password" placeholder="Toque no 👁️ para ver" oninput="salvar(); atualizarResumo()">
+      <button class="btn-olho" onclick="mostrarCampo('nome', this)">👁️</button>
+    </div>
+
+    <label>Seu CPF</label>
+    <div class="campo-olho">
+      <input id="cpf" type="password" placeholder="•••.•••.•••-••" maxlength="14" inputmode="numeric" oninput="formatarCPF(this); salvar(); atualizarResumo()">
+      <button class="btn-olho" onclick="mostrarCampo('cpf', this)">👁️</button>
+    </div>
+
+    <label>O que está acontecendo?</label>
+    <select id="ocorrencia" onchange="salvar()">
+      <option>Estou em perigo / Preciso de ajuda</option>
+      <option>Assalto / Roubo</option>
+      <option>Violência doméstica</option>
+      <option>Acidente / Preciso de ambulância</option>
+      <option>Incêndio</option>
+      <option>Estou sendo seguido(a)</option>
+      <option>Outro</option>
+    </select>
+
+    <label>Contato 1 - WhatsApp (DDD + número)</label>
+    <div class="campo-olho">
+      <input id="c1" type="password" placeholder="•••••••••••" inputmode="numeric" oninput="salvar(); atualizarResumo()">
+      <button class="btn-olho" onclick="mostrarCampo('c1', this)">👁️</button>
+    </div>
+
+    <label>Contato 2 - WhatsApp</label>
+    <div class="campo-olho">
+      <input id="c2" type="password" placeholder="•••••••••••" inputmode="numeric" oninput="salvar(); atualizarResumo()">
+      <button class="btn-olho" onclick="mostrarCampo('c2', this)">👁️</button>
+    </div>
+
+    <label>Contato 3 - WhatsApp</label>
+    <div class="campo-olho">
+      <input id="c3" type="password" placeholder="•••••••••••" inputmode="numeric" oninput="salvar(); atualizarResumo()">
+      <button class="btn-olho" onclick="mostrarCampo('c3', this)">👁️</button>
+    </div>
+
+    <button class="btn-salvar" onclick="salvarManual()">💾 SALVAR E OCULTAR NOVAMENTE</button>
+    <div id="status" class="status">✅ Dados salvos e ocultados!</div>
+  </div>
+
+  <button class="btn-bem" onclick="estouBem()">✅ ESTOU BEM<span>CANCELAR ALERTA - ESTOU SEGURO(A)</span></button>
+
+  <p class="aviso">🔒 Seus dados ficam salvos SÓ no seu celular, ocultos com •••.<br>Ao apertar PÂNICO, seus contatos recebem protocolo, nome, CPF, ocorrência e localização exata.<br><br>Protótipo para avaliação da CICC / SSP-PI.</p>
+</div>
+
+<div class="rodape">
+  <small>🛡️ Uso exclusivo para emergências reais • Liga diretamente para o serviço</small>
+  <div>
+    <button class="btn-panico-flutuante" onclick="abrirEscolha()">!</button>
+    <div class="label-panico">PÂNICO</div>
+  </div>
+</div>
+
+<div id="modal" class="modal">
+  <div class="modal-card">
+    <h2>🚨 Qual atendimento você quer?</h2>
+    <p>Marque um ou mais. Vamos avisar seus contatos e ligar.</p>
+    <label class="opt" id="opt190"><input type="checkbox" id="chk190" checked><div><b>🚔 190 - POLÍCIA MILITAR</b><span>Assalto, roubo, violência, perigo</span></div></label>
+    <label class="opt" id="opt193"><input type="checkbox" id="chk193"><div><b>🚒 193 - BOMBEIROS</b><span>Incêndio, acidente, resgate</span></div></label>
+    <label class="opt" id="opt192"><input type="checkbox" id="chk192"><div><b>🚑 192 - SAMU</b><span>Passando mal, acidente com ferido</span></div></label>
+    <label class="opt" id="optContatos"><input type="checkbox" id="chkContatos" checked><div><b>👨‍👩‍👧 SÓ AVISAR MEUS CONTATOS</b><span>Mandar WhatsApp sem ligar agora</span></div></label>
+    <button class="btn-confirmar" onclick="confirmarPanico()">🚨 CONFIRMAR E ENVIAR ALERTA</button>
+    <button class="btn-cancelar" onclick="fecharModal()">Voltar - Não foi nada</button>
+  </div>
 </div>
 
 <script>
-// CARREGAR DADOS SALVOS
+let dadosAbertos = false;
+
 window.onload = function(){
   ['nome','cpf','ocorrencia','c1','c2','c3'].forEach(id=>{
     let v = localStorage.getItem('sos_'+id);
     if(v) document.getElementById(id).value = v;
   });
+  atualizarCorOpts();
+  atualizarResumo();
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(p=>{
+      document.getElementById('textoLocal').innerHTML = `Sua localização:<br>📍 ${p.coords.latitude.toFixed(4)}, ${p.coords.longitude.toFixed(4)} - Teresina - PI`;
+    });
+  }
+}
+
+function alternarDados(){
+  dadosAbertos = !dadosAbertos;
+  document.getElementById('corpoDados').classList.toggle('aberto', dadosAbertos);
+  let badge = document.getElementById('badgeDados');
+  if(dadosAbertos){ badge.textContent = '👁️ VISÍVEL - Toque para ocultar'; badge.className = 'badge-visivel'; }
+  else { badge.textContent = '🔒 OCULTO'; badge.className = 'badge-oculto'; }
+}
+
+function mostrarCampo(id, btn){
+  let el = document.getElementById(id);
+  if(el.type === 'password'){ el.type = 'text'; btn.textContent = '🙈'; }
+  else { el.type = 'password'; btn.textContent = '👁️'; }
+}
+
+function atualizarResumo(){
+  let nome = document.getElementById('nome').value.trim();
+  let contatos = ['c1','c2','c3'].map(id=>document.getElementById(id).value.trim()).filter(Boolean).length;
+  let status = document.getElementById('textoStatus');
+  if(nome && contatos > 0){
+    status.textContent = `✅ Configurado - ${contatos} contato(s) salvo(s) e oculto(s)`;
+    status.style.color = '#065f46';
+  } else {
+    status.textContent = '⚠️ Falta configurar - toque em 🔒 OCULTO';
+    status.style.color = '#dc2626';
+  }
 }
 
 function salvar(){
-  ['nome','cpf','ocorrencia','c1','c2','c3'].forEach(id=>{
-    localStorage.setItem('sos_'+id, document.getElementById(id).value);
-  });
+  ['nome','cpf','ocorrencia','c1','c2','c3'].forEach(id=> localStorage.setItem('sos_'+id, document.getElementById(id).value));
 }
 function salvarManual(){
-  salvar();
+  salvar(); atualizarResumo();
   let s = document.getElementById('status');
   s.style.display='block';
-  setTimeout(()=> s.style.display='none', 3000);
+  // Volta para oculto automaticamente
+  setTimeout(()=>{
+    s.style.display='none';
+    if(dadosAbertos) alternarDados();
+    // Volta todos os campos para password
+    ['nome','cpf','c1','c2','c3'].forEach(id=> document.getElementById(id).type = 'password');
+  }, 1200);
 }
-
 function formatarCPF(el){
   let v = el.value.replace(/\D/g,'').slice(0,11);
   v = v.replace(/(\d{3})(\d)/,'$1.$2');
@@ -107,68 +252,87 @@ function formatarCPF(el){
   v = v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');
   el.value = v;
 }
+function compartilharLocal(){
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(p=>{
+      let link = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+      let nome = document.getElementById('nome').value || 'Usuário SOS Teresina';
+      let msg = `📍 MINHA LOCALIZAÇÃO - SOS TERESINA\n\n${nome} compartilhou a localização:\n${link}`;
+      let contatos = ['c1','c2','c3'].map(id=>document.getElementById(id).value.trim()).filter(Boolean);
+      if(contatos.length===0){ alert('Cadastre pelo menos 1 contato primeiro! Toque em 🔒 OCULTO para configurar.'); return; }
+      contatos.forEach(c=> window.open('https://wa.me/55'+c.replace(/\D/g,'')+'?text='+encodeURIComponent(msg), '_blank'));
+    });
+  } else alert('Ative a localização do celular!');
+}
+function abrirEscolha(){
+  let nome = document.getElementById('nome').value.trim();
+  let cpf = document.getElementById('cpf').value.trim();
+  let contatos = ['c1','c2','c3'].map(id=>document.getElementById(id).value.trim()).filter(Boolean);
+  if(!nome || !cpf || contatos.length===0){
+    alert('⚠️ Toque em 🔒 OCULTO e preencha nome, CPF e pelo menos 1 contato antes de apertar PÂNICO!');
+    if(!dadosAbertos) alternarDados();
+    return;
+  }
+  document.getElementById('modal').style.display='flex';
+}
+function fecharModal(){ document.getElementById('modal').style.display='none'; }
+function atualizarCorOpts(){
+  ['190','193','192','contatos'].forEach(n=>{
+    let chk = document.getElementById('chk'+n);
+    let card = document.getElementById('opt'+n);
+    if(chk && card){
+      if(chk.checked) card.classList.add('ativo');
+      else card.classList.remove('ativo');
+    }
+  });
+}
+document.addEventListener('change', atualizarCorOpts);
 
 function estouBem(){
   let nome = document.getElementById('nome').value || 'Usuário';
   let contatos = ['c1','c2','c3'].map(id=>document.getElementById(id).value.trim()).filter(Boolean);
   if(contatos.length===0){ alert('Cadastre pelo menos 1 contato primeiro!'); return; }
-  let msg = `✅ ESTOU BEM - SOS TERESINA\n\n${nome} informou que está BEM e cancelou o alerta.\n\nNão é mais necessário ajuda.`;
-  contatos.forEach(c=>{
-    let num = '55' + c.replace(/\D/g,'');
-    window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg), '_blank');
-  });
-  alert('Mensagem ESTOU BEM enviada!');
+  if(!confirm('Você está BEM mesmo? Vamos avisar seus contatos que o alerta foi cancelado.')) return;
+  let msg = `✅✅ ESTOU BEM - SOS TERESINA ✅✅\n\n${nome} informou que ESTÁ BEM e CANCELOU o alerta.\n\nNão é mais necessário ajuda. Falso alarme / já foi resolvido.\n\nObrigado!`;
+  contatos.forEach(c=> window.open('https://wa.me/55'+c.replace(/\D/g,'')+'?text='+encodeURIComponent(msg), '_blank'));
+  alert('✅ Alerta cancelado! Seus contatos foram avisados que você está bem.');
 }
 
-function dispararPanico(){
+function confirmarPanico(){
+  fecharModal();
+  let quer190 = document.getElementById('chk190').checked;
+  let quer193 = document.getElementById('chk193').checked;
+  let quer192 = document.getElementById('chk192').checked;
+  let querContatos = document.getElementById('chkContatos').checked;
+  if(!quer190 && !quer193 && !quer192 && !querContatos){ alert('Marque pelo menos uma opção!'); return; }
   let nome = document.getElementById('nome').value.trim();
   let cpf = document.getElementById('cpf').value.trim();
   let ocorr = document.getElementById('ocorrencia').value;
   let contatos = ['c1','c2','c3'].map(id=>document.getElementById(id).value.trim()).filter(Boolean);
-
-  if(!nome || !cpf || contatos.length===0){
-    alert('⚠️ Preencha nome, CPF e pelo menos 1 contato antes de apertar PÂNICO!');
-    return;
-  }
-
+  let atendimentos = [];
+  if(quer190) atendimentos.push('190 - POLÍCIA');
+  if(quer193) atendimentos.push('193 - BOMBEIROS');
+  if(quer192) atendimentos.push('192 - SAMU');
+  if(querContatos && atendimentos.length===0) atendimentos.push('SÓ AVISAR CONTATOS');
   let protocolo = 'SOS-2026-' + Math.floor(1000 + Math.random()*9000);
   let data = new Date().toLocaleString('pt-BR');
-
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(pos=>{
-      enviar(pos.coords.latitude, pos.coords.longitude, protocolo, data, nome, cpf, ocorr, contatos);
-    }, ()=>{
-      enviar(null, null, protocolo, data, nome, cpf, ocorr, contatos);
-    });
-  } else {
-    enviar(null, null, protocolo, data, nome, cpf, ocorr, contatos);
-  }
-}
-
-function enviar(lat, lon, protocolo, data, nome, cpf, ocorr, contatos){
-  let linkMapa = lat ? `https://www.google.com/maps?q=${lat},${lon}` : 'Localização não disponível - ligar para a pessoa';
-  let msg = `🚨🚨 SOS TERESINA - EMERGÊNCIA 🚨🚨\n\n` +
-  `PROTOCOLO: ${protocolo}\n` +
-  `DATA/HORA: ${data}\n` +
-  `NOME: ${nome}\n` +
-  `CPF: ${cpf}\n` +
-  `OCORRÊNCIA: ${ocorr}\n\n` +
-  `📍 LOCALIZAÇÃO EXATA:\n${linkMapa}\n\n` +
-  `⚠️ A PESSOA ESTÁ EM PERIGO! LIGUE PARA ELA AGORA E ACIONE 190 SE PRECISO.`;
-
-  contatos.forEach(c=>{
-    let num = '55' + c.replace(/\D/g,'');
-    window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg), '_blank');
-  });
-
-  // Depois de mandar, abre o discador no 190
-  setTimeout(()=>{
-    if(confirm('Alerta enviado para seus contatos! Deseja ligar agora para o 190?')){
-      window.location.href = 'tel:190';
+  let fazerEnvio = (lat, lon) => {
+    let linkMapa = lat ? `https://www.google.com/maps?q=${lat},${lon}` : 'Localização não disponível - ligar para a pessoa';
+    let msg = `🚨🚨 SOS TERESINA - EMERGÊNCIA 🚨🚨\n\nPROTOCOLO: ${protocolo}\nDATA/HORA: ${data}\nNOME: ${nome}\nCPF: ${cpf}\nOCORRÊNCIA: ${ocorr}\nATENDIMENTO SOLICITADO: ${atendimentos.join(' + ')}\n\n📍 LOCALIZAÇÃO EXATA:\n${linkMapa}\n\n⚠️ A PESSOA ESTÁ EM PERIGO! LIGUE PARA ELA AGORA.`;
+    if(querContatos){
+      contatos.forEach(c=> window.open('https://wa.me/55'+c.replace(/\D/g,'')+'?text='+encodeURIComponent(msg), '_blank'));
     }
-  }, 800);
+    setTimeout(()=>{
+      if(quer190) window.location.href = 'tel:190';
+      else if(quer193) window.location.href = 'tel:193';
+      else if(quer192) window.location.href = 'tel:192';
+      else alert('Alerta enviado para seus contatos!');
+    }, 800);
+  };
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(p=> fazerEnvio(p.coords.latitude, p.coords.longitude), ()=> fazerEnvio(null,null));
+  } else fazerEnvio(null,null);
 }
 </script>
-
 </body>
 </html>
